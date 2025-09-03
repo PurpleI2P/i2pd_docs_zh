@@ -10,11 +10,11 @@
 
     ./i2pd
 
-显示所有可用选项：
+要显示所有可用选项：
 
     ./i2pd --help
 
-i2pd 可以通过信号进行控制。进程 ID 默认写入文件 `~/.i2pd/i2pd.pid` 或 `/var/run/i2pd/i2pd.pid`。你可以使用 `kill` 工具如下发送信号：
+i2pd 可以通过信号进行控制。进程 ID 默认写入文件 `~/.i2pd/i2pd.pid` 或 `/var/run/i2pd/i2pd.pid`。你可以使用 `kill` 工具发送信号：
 
     kill -INT $( cat /var/run/i2pd/i2pd.pid )
 
@@ -26,7 +26,7 @@ i2pd 支持以下信号：
 
 ### systemd 单元
 
-某些 i2pd 软件包附带 systemd 控制单元，对于使用 systemd 的系统，可以通过它管理 i2pd。
+部分 i2pd 软件包附带 systemd 控制单元，对于使用 systemd 的系统，可以通过它管理 i2pd。
 
 启动/停止 i2pd：
 
@@ -41,7 +41,7 @@ stop 命令会发起优雅关闭流程，i2pd 会在完成中转隧道路由后�
     sudo systemctl disable i2pd.service
 
 
-推荐的从源代码构建的 i2pd 运行方式
+从源代码构建的 i2pd 的推荐运行方式
 ---------------------------------------------
 
 以下命令展示了在不使用包管理器的情况下运行从源代码构建的 i2pd 的推荐方法。以这种方式安装将确保所有 i2pd 相关文件存储在 `$HOME/dist`。
@@ -60,14 +60,14 @@ stop 命令会发起优雅关闭流程，i2pd 会在完成中转隧道路由后�
 覆盖 systemd 服务参数
 -----
 
-若要覆盖 systemd 服务的默认参数，创建 `/etc/systemd/system/i2pd.service.d/override.conf` 文件并放入需要覆盖的选项。别忘了使用选项节。
+若要覆盖 systemd 服务的默认参数，创建 `/etc/systemd/system/i2pd.service.d/override.conf` 文件并放入需要覆盖的选项。别忘了使用配置节(option section)。
 
 ```
 mkdir -p /etc/systemd/system/i2pd.service.d/
 touch /etc/systemd/system/i2pd.service.d/override.conf
 ```
 
-启用 coredump 并提升 `nofile` 限制的示例内容
+举例：启用 coredump 并提升 `nofile` 限制
 
 ```
 [Service]
