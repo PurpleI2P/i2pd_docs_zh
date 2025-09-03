@@ -1,5 +1,4 @@
-I2PControl interface
+I2PControl 接口
 =============
 
-I2PControl interface is documented [here](https://geti2p.net/en/docs/api/i2pcontrol)
-
+I2PControl 接口的文档在[此处](https://geti2p.net/zh/docs/api/i2pcontrol)

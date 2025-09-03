@@ -1,75 +1,73 @@
-Running i2pd
+运行 i2pd
 ============
 
-Starting, stopping and reloading configuration
+启动、停止与重新加载配置
 ----------------------------------------------
 
-This chapter explains how to start and manage the i2pd daemon under Unix-like operation systems.
+本章说明如何在类 Unix 操作系统下启动和管理 i2pd 守护进程。
 
-After you have built i2pd from source, just run the binary:
+当你已从源代码构建好 i2pd 后，直接运行二进制文件：
 
     ./i2pd
 
-To display all available options:
+显示所有可用选项：
 
     ./i2pd --help
 
-i2pd can be controlled with signals. The process ID by is written to the file `~/.i2pd/i2pd.pid` or 
-`/var/run/i2pd/i2pd.pid` by default. You can use `kill` utility to send signals like this:
+i2pd 可以通过信号进行控制。进程 ID 默认写入文件 `~/.i2pd/i2pd.pid` 或 `/var/run/i2pd/i2pd.pid`。你可以使用 `kill` 工具如下发送信号：
 
     kill -INT $( cat /var/run/i2pd/i2pd.pid )
 
-i2pd supports the following signals:
+i2pd 支持以下信号：
 
-* INT - Graceful shutdown. i2pd will wait for up to 10 minutes and stop. Send a second INT signal to shutdown i2pd immediately.
-* HUP - Reload tunnels configuration files.
+* INT - 优雅关闭。i2pd 将等待最多 10 分钟后停止。再次发送 INT 信号可立即关闭 i2pd。
+* HUP - 重新加载隧道配置文件。
 
 
-### systemd unit
+### systemd 单元
 
-Some i2pd packages come with a systemd control unit, and for those that use systemd, it is possible to manage i2pd with it.
+某些 i2pd 软件包附带 systemd 控制单元，对于使用 systemd 的系统，可以通过它管理 i2pd。
 
-To start/stop i2pd:
+启动/停止 i2pd：
 
     sudo systemctl start i2pd.service
     sudo systemctl stop i2pd.service --no-block
 
-The stop command initiates a graceful shutdown process, i2pd stops after finishing to route transit tunnels (maximum 10 minutes).
+stop 命令会发起优雅关闭流程，i2pd 会在完成中转隧道路由后停止（最多 10 分钟）。
 
-To enable/disable autostart of i2pd upon bootup:
+启用/禁用开机自启动：
 
     sudo systemctl enable i2pd.service
     sudo systemctl disable i2pd.service
 
 
-Recommended way to run i2pd built from source
+推荐的从源代码构建的 i2pd 运行方式
 ---------------------------------------------
 
-The following commands display the recommended way to run i2pd built from source, without a package manager. Installing i2pd this 
-way will ensure all i2pd-related files are stored at `$HOME/dist`.
+以下命令展示了在不使用包管理器的情况下运行从源代码构建的 i2pd 的推荐方法。以这种方式安装将确保所有 i2pd 相关文件存储在 `$HOME/dist`。
 
     mkdir $HOME/dist
     cp i2pd $HOME/dist
     cp -R contrib/certificates $HOME/dist
     cp contrib/i2pd.conf $HOME/dist
     cd $HOME/dist
-    ulimit -n 4096  # only on Linux, increasing open file limit
+    ulimit -n 4096  # 仅在 Linux 上，用于提升打开文件数限制
 
-Then, to run i2pd, simply travel to the installation directory and type:
+然后，进入安装目录并运行：
 
     ./i2pd --datadir .
 
-Overriding systemd service parameters
+覆盖 systemd 服务参数
 -----
 
-For overriding systemd service defaults create `/etc/systemd/system/i2pd.service.d/override.conf` file and place overriden options. Don't forget use option section.
+若要覆盖 systemd 服务的默认参数，创建 `/etc/systemd/system/i2pd.service.d/override.conf` 文件并放入需要覆盖的选项。别忘了使用选项节。
 
 ```
 mkdir -p /etc/systemd/system/i2pd.service.d/
 touch /etc/systemd/system/i2pd.service.d/override.conf
 ```
 
-Example content with enabled coredump and increased `nofile` limit
+启用 coredump 并提升 `nofile` 限制的示例内容
 
 ```
 [Service]

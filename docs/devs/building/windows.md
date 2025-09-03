@@ -1,137 +1,119 @@
-Building on Windows
+在 Windows 上构建
 =========================
 
-There are two approaches available to build i2pd on Windows. The best
-one depends on your needs and personal preferences. One is to use
-msys2 and [unix alike infrastructure](unix.md). Another
-one is to use Visual Studio. While there might be no difference for
-end users of i2pd daemon, developers, however, shall be wary of
-differences in C++ name mangling between the two compilers when making
-a choice to be able to link their software against libi2pd.
+构建 i2pd 在 Windows 上有两种方式。哪种更好取决于你的需求和个人偏好。一种是使用 msys2 和[类 Unix 的构建环境](unix.md)，另一种是使用 Visual Studio。虽然对 i2pd 守护进程的最终用户来说两者可能没有差别，但开发者在选择以便将自己的软件链接到 libi2pd 时，应注意两种编译器之间 C++ 名字改编（name mangling）的差异。
 
-If you are a stranger to C++ with no development tools installed on
-your system and your only goal is to have i2pd up and running from the
-most recent source, consider using msys2. Although it relies on
-command line operations, it should be straight forward.
+如果你不熟悉 C++、系统上也未安装任何开发工具，而且你的唯一目标是从最新源码把 i2pd 跑起来，可以考虑使用 msys2。尽管它依赖命令行操作，但过程应当相对简单。
 
-In this guide, we will use CMake for both approaches and we will
-assume that you typically have your projects in C:\dev\ as your
-development location for the sake of convenience. Adjust paths
-accordingly if it is not the case. Note that msys uses unix-alike
-paths like /c/dev/ for C:\dev\.
+本指南将对两种方式都使用 CMake，并假定你通常把项目放在 C:\dev\ 作为开发目录以方便说明。如果不是这种情况，请相应调整路径。注意 msys 使用类 Unix 的路径，如 /c/dev/ 表示 C:\dev\。
 
 msys2
 -----
 
-Get install file `msys2-$ARCH-*.exe` from `https://msys2.github.io`
+从 https://msys2.github.io 获取安装包 `msys2-$ARCH-*.exe`
 
-Where $ARCH is `i686` or `x86_64` (matching your system).
+其中 $ARCH 为 `i686` 或 `x86_64`（与你的系统匹配）。
 
-- Open MSYS2 Shell (from Start menu).
-- Install all prerequisites and download i2pd source:
+- 打开 MSYS2 Shell（开始菜单中）。
+- 安装所有先决条件并下载 i2pd 源码：
 
-        export ARCH='i686'     # or 'x86_64'
-        export MINGW='mingw32' # or 'mingw64'
+        export ARCH='i686'     # 或 'x86_64'
+        export MINGW='mingw32' # 或 'mingw64'
         pacman -S mingw-w64-$ARCH-boost mingw-w64-$ARCH-openssl mingw-w64-$ARCH-gcc git make
         mkdir -p /c/dev/i2pd
         cd /c/dev/i2pd
         git clone https://github.com/PurpleI2P/i2pd.git
         cd i2pd
-        # we need compiler on PATH which is usually heavily cluttered on Windows
+        # 我们需要 PATH 中的编译器；Windows 上 PATH 往往非常杂乱
         export PATH=/$MINGW/bin:/usr/bin
         make
 
-### Caveats
+### 注意事项
 
-It is important to restrict PATH as described above.
-If you have Strawberry Perl and/or Mercurial installed,
-it will pick up gcc & openssl from the wrong places.
+按上面所述限制 PATH 非常重要。
+如果你安装了 Strawberry Perl 和/或 Mercurial，可能会从错误的位置拾取 gcc 和 openssl。
 
-If you do use precompiled headers to speed up compilation (recommended),
-things can go wrong if compiler options have changed for whatever reason.
-Just delete `stdafx.h.gch` found in your build folder, note the file extension.
+如果你使用预编译头来加快编译（推荐），一旦编译选项因各种原因发生变化，可能会导致问题。
+只需删除构建文件夹中的 `stdafx.h.gch`（注意扩展名）即可。
 
-If you are an Arch Linux user, refrain from updating system with `pacman -Syu`.
-Always update runtime separately as described on the home page,
-otherwise you might end up with DLLs incompatibility problems.
+如果你是 Arch Linux 用户，请避免使用 `pacman -Syu` 更新系统。
+请始终按主页说明单独更新 runtime，否则可能遇到 DLL 兼容性问题。
 
 ### AES-NI
 
-If your processor has [AES instruction set](https://en.wikipedia.org/wiki/AES_instruction_set),
-use `make USE_AESNI=1` instead just `make`. No check is done however, it will compile,
-but it might crash with `Illegal instruction` if this feature is not supported by your processor.
+如果你的处理器支持 [AES 指令集](https://en.wikipedia.org/wiki/AES_instruction_set)，
+使用 `make USE_AESNI=1` 替代 `make`。不过不会进行检测，它会编译通过，
+但如果处理器不支持该特性，运行时可能以 `Illegal instruction` 崩溃。
 
-You should be able to run ./i2pd . If you need to start from the new shell,
-consider starting *MinGW-w64 Win32 Shell* instead of *MSYS2 Shell*
-as it adds `/minw32/bin` to the PATH.
+你应该可以运行 ./i2pd。如果需要从新的 shell 启动，
+考虑启动 “MinGW-w64 Win32 Shell” 而不是 “MSYS2 Shell”，
+因为它会将 `/minw32/bin` 添加到 PATH。
 
 ### UPnP
 
-You can install it through the MSYS2 and build with `USE_UPNP` key.
+可以通过 MSYS2 安装并使用 `USE_UPNP` 选项进行构建。
 
-	export ARCH='i686' # or 'x86_64'
+	export ARCH='i686' # 或 'x86_64'
 	pacman -S mingw-w64-$ARCH-miniupnpc
 	make USE_UPNP=yes
 
-Using Visual Studio
+使用 Visual Studio
 -------------------
 
-### Installing dependencies through vcpkg
+### 通过 vcpkg 安装依赖
 
-Requirements:
+要求：
 
-* [vcpkg](https://vcpkg.io/) (NOTE: Due to Microsoft's telemetry policies, it is strongly advised to opt out of data collection by referring to [this document](https://github.com/microsoft/vcpkg#telemetry).)
-* [Visual Studio Community Edition](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) (tested with VS2022)
+* [vcpkg](https://vcpkg.io/)（注意：由于微软的遥测策略，强烈建议参考[此文档](https://github.com/microsoft/vcpkg#telemetry)选择退出数据收集。）
+* [Visual Studio Community 版](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)（已用 VS2022 测试）
 
-This part assumes that you know how to use and integrate vcpkg into Visual Studio.
-Read [this](https://learn.microsoft.com/en-us/vcpkg/) if you are unsure.
-Navigate to the vcpkg directory, and run(change x64-windows to x86-windows for a 32bit build):
+本部分假定你已经会在 Visual Studio 中使用并集成 vcpkg。
+如果不确定，请阅读[这里](https://learn.microsoft.com/en-us/vcpkg/)。
+进入 vcpkg 目录并运行（32 位构建将 x64-windows 替换为 x86-windows）：
 
     .\vcpkg install boost:x64-windows miniupnpc:x64-windows openssl:x64-windows
 
-You may now skip directly to the [build process](#creating-visual-studio-project).
+现在你可以直接跳到[创建 Visual Studio 项目](#creating-visual-studio-project)。
 
-### Without vcpkg
+### 不使用 vcpkg
 
-Requirements for building:
+构建所需：
 
-* [CMake](https://cmake.org/) (tested with 3.1.3)
-* [Visual Studio Community Edition](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx) (tested with VS2013 Update 4)
-* [Boost](http://www.boost.org/) (tested with 1.59)
-* Optionally [MiniUPnP](http://miniupnp.free.fr) (tested with 1.9), we need only few client headers
-* OpenSSL (tested with 1.0.1p and 1.0.2e), if building from sources (recommended), you'll need as well
+* [CMake](https://cmake.org/)（测试版本 3.1.3）
+* [Visual Studio Community 版](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)（测试版本 VS2013 Update 4）
+* [Boost](http://www.boost.org/)（测试版本 1.59）
+* 可选 [MiniUPnP](http://miniupnp.free.fr)（测试版本 1.9），只需要少量客户端头文件
+* OpenSSL（测试版本 1.0.1p 和 1.0.2e），如果从源码构建（推荐），还需要
 	* [Netwide assembler](http://www.nasm.us/)
-	* Strawberry Perl or ActiveState Perl, do NOT try msys2 perl, it won't work
+	* Strawberry Perl 或 ActiveState Perl，请勿尝试 msys2 的 perl，它无法工作
 
-### Building Boost
+### 构建 Boost
 
-Open a Command Prompt (there is no need to start Visual Studio command
-prompt to build Boost) and run the following:
+打开命令提示符（构建 Boost 无需使用 Visual Studio 命令提示符）并运行：
 
 	cd C:\dev\boost
 	bootstrap
 	b2 toolset=msvc-12.0 --build-type=complete --with-filesystem --with-program_options --with-date_time
 
-If you are on 64-bit Windows and you want to build 64-bit version as well
+如果你在 64 位 Windows 上，并且也想构建 64 位版本：
 
 	b2 toolset=msvc-12.0 --build-type=complete --stagedir=stage64 address-model=64 --with-filesystem --with-program_options --with-date_time
 
-After Boost is compiled, set the environment variable `BOOST_ROOT` to
-the directory Boost was unpacked to, e.g., C:\dev\boost.
+Boost 编译完成后，将环境变量 `BOOST_ROOT` 设置为 Boost 解压目录，例如 C:\dev\boost。
 
-If you are planning on building only particular variant, e.g. Debug only and static linking,
-and/or you are out of space/time, you might consider `--build-type=minimal`.
-Take a look at [appveyor.yml](../appveyor.yml) for details on how test builds are done.
+如果你只计划构建某种变体，例如仅 Debug 且静态链接，
+或者你的空间/时间有限，可以考虑使用 `--build-type=minimal`。
+关于测试构建的细节可以参考 [appveyor.yml](../appveyor.yml)。
 
-### Building OpenSSL
+### 构建 OpenSSL
 
-Download OpenSSL, e.g. with git
+下载 OpenSSL，例如使用 git
 
 	git clone https://github.com/openssl/openssl.git
 	cd openssl
 	git checkout OpenSSL_1_0_1p
 
-Now open Visual Studio command prompt and change directory to that with OpenSSL
+现在打开 Visual Studio 命令提示符并切换到 OpenSSL 目录
 
 	set "PATH=%PATH%;C:\Program Files (x86)\nasm"
 	perl Configure VC-WIN32 --prefix=c:\OpenSSL-Win32
@@ -139,39 +121,38 @@ Now open Visual Studio command prompt and change directory to that with OpenSSL
 	nmake -f ms\ntdll.mak
 	nmake -f ms\ntdll.mak install
 
-You should have it installed into C:\OpenSSL-Win32 by now.
+现在应已安装到 C:\OpenSSL-Win32。
 
-Note that you might consider providing `-DOPENSSL_ROOT_DIR` to CMake and/or
-create a symlink (with mklink /J) to C:\OpenSSL if you plan on maintain
-multiple versions, e.g. 64 bit and/or static/shared.
-See `C:\Program Files (x86)\CMake\share\cmake-3.3\Modules\FindOpenSSL.cmake` for details.
+注意你可以考虑向 CMake 提供 `-DOPENSSL_ROOT_DIR`，和/或
+如果你计划维护多个版本（例如 64 位 和/或 静态/共享），可创建指向 C:\OpenSSL 的联接（mklink /J）。
+详见 `C:\Program Files (x86)\CMake\share\cmake-3.3\Modules\FindOpenSSL.cmake`。
 
-### Get miniupnpc
+### 获取 miniupnpc
 
-If you are behind a UPnP enabled router and don't feel like manually configuring port forwarding,
-you should consider using [MiniUPnP](http://miniupnp.free.fr) client.
-I2pd can be built capable of using miniupnpc shared library (DLL) to open up necessary port.
-You'd want to have include headers around to build i2pd with support for this.
-Unpack client source code to subdir, e.g. `C:\dev\miniupnpc`.
-You may want to remove version number from folder name included in downloaded archive.
- 
-### Creating Visual Studio project
+如果你在启用 UPnP 的路由器后面且不想手动配置端口转发，
+可以考虑使用 [MiniUPnP](http://miniupnp.free.fr) 客户端。
+i2pd 可以构建为使用 miniupnpc 共享库（DLL）来打开所需端口。
+你需要准备好头文件以便构建具有该支持的 i2pd。
+将客户端源码解压到子目录，例如 `C:\dev\miniupnpc`。
+你可能希望把下载归档中带版本号的目录名移除版本号。
 
-Start CMake GUI, navigate to i2pd directory, choose building directory,  e.g. ./out, and configure options.
+### 创建 Visual Studio 项目
 
-Alternatively, if you feel adventurous, try that from the command line
+启动 CMake GUI，定位到 i2pd 目录，选择构建目录（如 ./out），并配置选项。
+
+或者，如果你喜欢用命令行，可以试试：
 
 	mkdir i2pd\out
 	cd i2pd\out
 	cmake ..\build -G "Visual Studio 12 2013" -DWITH_UPNP=ON -DWITH_PCH=ON -DCMAKE_INSTALL_PREFIX:PATH=C:\dev\Debug_Win32_stage
 
-If necessary files are not found `WITH_UPNP` will stay off.
-vcpkg users may refer to [this](https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration) for CMake flags.
+如果未找到必要的文件，`WITH_UPNP` 将保持关闭。
+vcpkg 用户可参考[这里](https://learn.microsoft.com/en-us/vcpkg/users/buildsystems/cmake-integration)获取 CMake 选项。
 
-### Building i2pd
+### 构建 i2pd
 
-You can open generated solution/project with Visual Studio and build from there,
-alternatively you can use `cmake --build . --config Release --target install` or
-[MSBuild tool](https://msdn.microsoft.com/en-us/library/dd293626.aspx)
+你可以用 Visual Studio 打开生成的解决方案/项目并从那里构建，
+或者使用 `cmake --build . --config Release --target install`，或
+[MSBuild 工具](https://msdn.microsoft.com/en-us/library/dd293626.aspx)
 
 	msbuild i2pd.sln /p:Configuration=Release

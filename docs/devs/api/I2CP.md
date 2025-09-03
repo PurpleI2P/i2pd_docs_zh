@@ -1,5 +1,4 @@
-I2CP interface
+I2CP 接口
 ==============
 
-I2CP interface is documented [here](https://geti2p.net/en/docs/protocol/i2cp)
-
+I2CP 接口的文档在[此处](https://geti2p.net/zh/docs/protocol/i2cp)

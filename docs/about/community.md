@@ -1,9 +1,8 @@
-PurpleI2P team and community
+PurpleI2P 团队与社区
 ============================
 
-Community IRC channel on ILITA (irc.ilita.i2p): #dev ([webclient(I2P)](http://irc.acetone.i2p/web/))
+ILITA（irc.ilita.i2p）上的社区 IRC 频道：#dev（[网页版客户端（I2P）](http://irc.acetone.i2p/web/)）
 
-Community IRC channel [i2pd-dev@libera.chat](https://web.libera.chat/?channels=i2pd-dev) (not active)
+社区 IRC 频道 [i2pd-dev@libera.chat](https://web.libera.chat/?channels=i2pd-dev)（不活跃）
 
-Twitter hashtag [#i2pd](https://twitter.com/hashtag/i2pd)
-
+Twitter 话题标签 [#i2pd](https://twitter.com/hashtag/i2pd)

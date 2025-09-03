@@ -1,318 +1,315 @@
-i2pd configuration
+i2pd 配置
 ==================
 
-i2pd can be configured via either command-line arguments or config files.
-Modifying `i2pd.conf` is just a way of passing command line arguments to i2pd at boot;
-for example, running i2pd with argument `--port=10123` and setting option `port = 10123` in config file will have
-the same effect.
+i2pd 可以通过命令行参数或配置文件进行配置。
+修改 `i2pd.conf` 只是向 i2pd 在启动时传递命令行参数的一种方式；
+例如，以参数 `--port=10123` 运行 i2pd，与在配置文件中设置选项 `port = 10123` 的效果相同。
 
-There are two separate config files: `i2pd.conf` and `tunnels.conf`. `i2pd.conf` is the main configuration file, where
-you configure all options. `tunnels.conf` is the tunnel configuration file, where you configure I2P hidden services
-and client tunnels. the `tunnels.conf` options are documented [here](tunnels.md).
+有两个独立的配置文件：`i2pd.conf` 和 `tunnels.conf`。`i2pd.conf` 是主配置文件，你在其中配置所有选项。`tunnels.conf` 是隧道配置文件，你在其中配置 I2P 隐藏服务和客户端隧道。`tunnels.conf` 的选项文档在[此处](tunnels.md)。
 
-`i2pd.conf` accepts INI-like syntax, such as the following : <key> = <value>.
-Comments are "#", not ";" as you might expect. See [boost ticket](https://svn.boost.org/trac/boost/ticket/808)
-All command-line parameters are allowed as keys, but for those which contains dot (.), there is a special syntax.
+`i2pd.conf` 接受类 INI 的语法，例如：<键> = <值>。
+注释使用 “#”，而不是你可能预期的 “;”。参见 [boost 票据](https://svn.boost.org/trac/boost/ticket/808)
+所有命令行参数都可以作为键，但对于包含点号 (.) 的参数，有特殊语法。
 
-For example:
+例如：
 
 i2pd.conf:
 
-    # comment
-    log = true # use stdout (default)
+    # 注释
+    log = true # 使用标准输出（默认）
     ipv6 = true
-    # settings for specific module
+    # 针对特定模块的设置
     [httpproxy]
     port = 4444
-    # ^^ this will be --httproxy.port= in cmdline
-    # another comment
+    # ^^ 这在命令行中将会是 --httproxy.port=
+    # 另一个注释
     [sam]
     enabled = true
 
-You are also encouraged to see the commented config with examples of all options in ``contrib/i2pd.conf``.
+同时也建议查看 ``contrib/i2pd.conf``，其中包含带注释的配置和所有选项的示例。
 
-Options specified on the command line take precedence over those in the config file.
-If you are upgrading your very old router (< 2.3.0) see also [this](config_opts_after_2.3.0.md) page.
+命令行中指定的选项优先于配置文件中的选项。
+如果你正在升级非常老的路由器（< 2.3.0），另请参见[这个](config_opts_after_2.3.0.md)页面。
 
-Available options
+可用选项
 -----------------
 
-Run `./i2pd --help` to show builtin help message (default value of option will be shown in braces)
+运行 `./i2pd --help` 显示内置帮助信息（选项的默认值将以大括号显示）
 
-### General options
+### 通用选项
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-conf                                   | Config file (default: ~/.i2pd/i2pd.conf or /var/lib/i2pd/i2pd.conf). This parameter will be silently ignored if the specified config file does not exist.
-tunconf                                | Tunnels config file (default: ~/.i2pd/tunnels.conf or /var/lib/i2pd/tunnels.conf)
-pidfile                                | Where to write pidfile (default: i2pd.pid, not used in Windows)
-log                                    | Logs destination: stdout, file, syslog (stdout if not set or invalid) (if daemon, stdout/unspecified are replaced by file in some cases)
-logfile                                | Path to logfile (default - autodetect)
-loglevel                               | Log messages above this level (debug, info, warn, error, none; default - warn)
-logclftime                             | Write full CLF-formatted date and time to log (default: false (write only time))
-datadir                                | Path to storage of i2pd data (configs, keys, netdb, peer profiles, etc ...). Can be passed as an agrument only.
-host                                   | Router external IP for incoming connections (default: auto if SSU2 is enabled)
-port                                   | Port to listen for incoming connections (default: auto (random))
-daemon                                 | Router will go to background after start (default: true)
-service                                | Router will use system folders like '/var/lib/i2pd' (on unix) or 'C:\ProgramData\i2pd' (on Windows). Ignored on MacOS and Android (default: false)
-ifname                                 | Network interface to bind to
-ifname4                                | Network interface to bind to for IPv4
-ifname6                                | Network interface to bind to for IPv6
-address4                               | Local address to bind to for IPv4
-address6                               | Local address to bind to for clearnet IPv6
-nat                                    | If true, assume we are behind NAT (default: true)
-ipv4                                   | Enable communication through IPv4 (default: true)
-ipv6                                   | Enable communication through clearnet IPv6 (default: false)
-notransit                              | Router will not accept transit tunnels, disabling transit traffic completely. G router cap will be published (default: false)
-floodfill                              | Router will be floodfill (default: false)
-bandwidth                              | Bandwidth limit: integer (kilobytes per second), letters: L (32), O (256), P (2048), X (unlimited), or integer with unit (b, kb, mb, gb), e.g., 100mb = 1000000 kb/s
-share                                  | Max % of bandwidth limit for transit. 0-100 (default: 100)
-family                                 | Name of a family, router belongs to
-netid                                  | Network ID, router belongs to. Main I2P is 2.
+conf                                   | 配置文件（默认：~/.i2pd/i2pd.conf 或 /var/lib/i2pd/i2pd.conf）。如果指定的配置文件不存在，此参数将被静默忽略。
+tunconf                                | 隧道配置文件（默认：~/.i2pd/tunnels.conf 或 /var/lib/i2pd/tunnels.conf）
+pidfile                                | 写入 pidfile 的位置（默认：i2pd.pid，Windows 上不使用）
+log                                    | 日志目标：stdout、file、syslog（若未设置或无效则为 stdout）（若作为守护进程运行，在某些情况下 stdout/未指定 会被替换为 file）
+logfile                                | 日志文件路径（默认 - 自动检测）
+loglevel                               | 记录此级别及以上的日志消息（debug、info、warn、error、none；默认 - warn）
+logclftime                             | 将完整的 CLF 格式日期和时间写入日志（默认：false（仅写入时间））
+datadir                                | i2pd 数据存储路径（配置、密钥、netdb、对等体档案等）。只能作为参数传递。
+host                                   | 用于入站连接的路由器外部 IP（默认：若启用 SSU2 则自动）
+port                                   | 用于入站连接的监听端口（默认：自动（随机））
+daemon                                 | 路由器启动后转入后台（默认：true）
+service                                | 路由器将使用系统目录，如（在 unix 上）'/var/lib/i2pd' 或（在 Windows 上）'C:\ProgramData\i2pd'。在 MacOS 和 Android 上忽略（默认：false）
+ifname                                 | 要绑定的网络接口
+ifname4                                | 绑定用于 IPv4 的网络接口
+ifname6                                | 绑定用于 IPv6 的网络接口
+address4                               | 绑定用于 IPv4 的本地地址
+address6                               | 绑定用于公网 IPv6 的本地地址
+nat                                    | 若为 true，假定我们处于 NAT 之后（默认：true）
+ipv4                                   | 启用通过 IPv4 的通信（默认：true）
+ipv6                                   | 启用通过公网 IPv6 的通信（默认：false）
+notransit                              | 路由器将不接受中转隧道，完全禁用中转流量。将发布 G 路由能力标志（默认：false）
+floodfill                              | 路由器将作为 floodfill（默认：false）
+bandwidth                              | 带宽限制：整数（每秒千字节），或字母：L（32）、O（256）、P（2048）、X（无限），或带单位的整数（b、kb、mb、gb），例如，100mb = 1000000 kb/s
+share                                  | 用于中转的带宽限制最大百分比。0-100（默认：100）
+family                                 | 路由器所属的家族名称
+netid                                  | 路由器所属的网络 ID。主 I2P 为 2。
 
-#### Notes
+#### 说明
 
-`datadir` and `service` options are only used as arguments for i2pd, these options have no effect when set in `i2pd.conf`.
+`datadir` 和 `service` 选项仅可作为 i2pd 的启动参数使用，在 `i2pd.conf` 中设置它们无效。
 
 ### NTCP2
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-ntcp2.enabled                          | Enable NTCP2 (default: true)
-ntcp2.published                        | Enable incoming NTCP2 connections (default: true)
-ntcp2.port                             | Port to listen for incoming NTCP2 connections (default: auto - port from general section)
-ntcp2.addressv6                        | External IPv6 for incoming connections
-ntcp2.proxy                            | Specify proxy server for NTCP2. Should be http://address:port or socks://address:port
+ntcp2.enabled                          | 启用 NTCP2（默认：true）
+ntcp2.published                        | 启用入站 NTCP2 连接（默认：true）
+ntcp2.port                             | 监听入站 NTCP2 连接的端口（默认：自动 - 来自通用部分的端口）
+ntcp2.addressv6                        | 用于入站连接的外部 IPv6
+ntcp2.proxy                            | 为 NTCP2 指定代理服务器。应为 http://address:port 或 socks://address:port
 
 ### SSU2
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-ssu2.enabled                           | Enable SSU2 (default: true)
-ssu2.published                         | Enable incoming SSU2 connections. (default: true)
-ssu2.port                              | Port to listen for incoming SSU2 connections (default: auto - 'port' from general section)
-ssu2.proxy                             | Specify UDP socks5 proxy server for SSU2. Should be socks://address:port  
-ssu2.mtu4                              | MTU for local ipv4. (default: auto)
-ssu2.mtu6                              | MTU for local ipv6. (default: auto)
+ssu2.enabled                           | 启用 SSU2（默认：true）
+ssu2.published                         | 启用入站 SSU2 连接（默认：true）
+ssu2.port                              | 监听入站 SSU2 连接的端口（默认：自动 - 使用通用部分的 `port`）
+ssu2.proxy                             | 为 SSU2 指定 UDP socks5 代理服务器。应为 socks://address:port  
+ssu2.mtu4                              | 本地 IPv4 的 MTU（默认：自动）
+ssu2.mtu6                              | 本地 IPv6 的 MTU（默认：自动）
     
-All options below still possible in cmdline, but better write it in config file:
+下面所有选项仍可在命令行中设置，但更建议写在配置文件中：
 
-### HTTP webconsole
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-http.enabled                           | If webconsole is enabled. (default: true)
-http.address                           | The address to listen on (HTTP server)
-http.port                              | The port to listen on (HTTP server) (default: 7070)
-http.auth                              | Enable basic HTTP auth for webconsole (default: false)
-http.user                              | Username for basic auth (default: i2pd)
-http.pass                              | Password for basic auth (default: random, see logs)
-http.strictheaders                     | Enable strict host checking on WebUI. (default: true)
-http.hostname                          | Expected hostname for WebUI (default: localhost)
-http.theme                             | Set webconsole CSS theme. Built-in themes: `black`, `white` (default: `light`). To use a custom theme, place a CSS file (e.g., `hacker.css`) in `%DataDir%/webconsole/` and use `--http.theme=hacker`.
-
-### HTTP proxy
+### HTTP Web 控制台
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-httpproxy.enabled                      | If HTTP proxy is enabled. (default: true)
-httpproxy.address                      | The address to listen on (HTTP Proxy)
-httpproxy.port                         | The port to listen on (HTTP Proxy) (default: 4444)
-httpproxy.addresshelper                | Enable address helper (jump). (default: true)
-httpproxy.keys                         | Optional keys file for HTTP proxy local destination
-httpproxy.signaturetype                | Signature type for new keys if keys file is set. (default: 7)
-httpproxy.inbound.length               | Inbound tunnels length if keys is set. (default: 3)
-httpproxy.inbound.quantity             | Inbound tunnels quantity if keys is set. (default: 5)
-httpproxy.inbound.lengthVariance       | Inbound tunnels length variance if keys is set. (default: 0)
-httpproxy.outbound.length              | Outbound tunnels length if keys is set. (default: 3)
-httpproxy.outbound.quantity            | Outbound tunnels quantity if keys is set. (default: 5)
-httpproxy.outbound.lengthVariance      | Outbound tunnels length variance if keys is set. (default: 0)
-httpproxy.outproxy                     | HTTP proxy upstream out proxy url (like http://exit.stormycloud.i2p)
-httpproxy.addresshelper                | Enable or disable addresshelper. (default: true)
-httpproxy.senduseragent                | Pass through user's User-Agent if enabled. (deafult: false)
-httpproxy.i2cp.leaseSetType            | Type of LeaseSet to be sent. 1, 3 or 5. (default: 3)
-httpproxy.i2cp.leaseSetEncType         | Comma separated encryption types to be used in LeaseSet type 3 or 5
-httpproxy.i2p.streaming.profile        | HTTP Proxy bandwidth usage profile. 1 - bulk(high), 2- interactive(low). (default: 1)
-httpproxy.i2p.streaming.maxWindowSize  | Max window size for streams (default: 512)
+http.enabled                           | 是否启用 Web 控制台（默认：true）
+http.address                           | 监听地址（HTTP 服务器）
+http.port                              | 监听端口（HTTP 服务器）（默认：7070）
+http.auth                              | 为 Web 控制台启用基本 HTTP 认证（默认：false）
+http.user                              | 基本认证的用户名（默认：i2pd）
+http.pass                              | 基本认证的密码（默认：随机，见日志）
+http.strictheaders                     | 在 WebUI 上启用严格的主机名检查（默认：true）
+http.hostname                          | WebUI 期望的主机名（默认：localhost）
+http.theme                             | 设置 Web 控制台的 CSS 主题。内置主题：`black`、`white`（默认：`light`）。要使用自定义主题，将 CSS 文件（例如 `hacker.css`）放在 `%DataDir%/webconsole/` 并使用 `--http.theme=hacker`。
 
-### Socks proxy
+### HTTP 代理
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-socksproxy.enabled                     | If SOCKS proxy is enabled. (default: true)
-socksproxy.address                     | The address to listen on (SOCKS Proxy)
-socksproxy.port                        | The port to listen on (SOCKS Proxy). (default: 4447)
-socksproxy.keys                        | Optional keys file for SOCKS proxy local destination
-socksproxy.signaturetype               | Signature type for new keys if keys file is set. (default: 7)
-socksproxy.inbound.length              | Inbound tunnels length if keys is set. (default: 3)
-socksproxy.inbound.quantity            | Inbound tunnels quantity if keys is set. (default: 5)
-socksproxy.inbound.lengthVariance      | Inbound tunnels length variance if keys is set. (default: 0)
-socksproxy.outbound.length             | Outbound tunnels length if keys is set. (default: 3)
-socksproxy.outbound.quantity           | Outbound tunnels quantity if keys is set. (default: 5)
-socksproxy.outbound.lengthVariance     | Outbound tunnels length variance if keys is set. (default: 0)
-socksproxy.outproxy.enabled            | Enable or disable SOCKS5 outproxy. (default: false)
-socksproxy.outproxy                    | Address of outproxy(IP or local). Requests outside I2P will go there.
-socksproxy.outproxyport                | Outproxy port. If 0 socksproxy.outproxy contains path to local socket
-socksproxy.i2cp.leaseSetType           | Type of LeaseSet to be sent. 1, 3 or 5. (default: 3)
-socksproxy.i2cp.leaseSetEncType        | Comma separated encryption types to be used in LeaseSet type 3 or 5
-socksproxy.i2p.streaming.profile       | SOCKS Proxy bandwidth usage profile. 1 - bulk(high), 2- interactive(low). (deafult: 1)
-socksproxy.i2p.streaming.maxWindowSize | Max window size for streams (default: 512)
+httpproxy.enabled                      | 是否启用 HTTP 代理（默认：true）
+httpproxy.address                      | 监听地址（HTTP 代理）
+httpproxy.port                         | 监听端口（HTTP 代理）（默认：4444）
+httpproxy.addresshelper                | 启用地址助手（jump）（默认：true）
+httpproxy.keys                         | HTTP 代理本地目的地的可选密钥文件
+httpproxy.signaturetype                | 如果设置了密钥文件，则用于新密钥的签名类型（默认：7）
+httpproxy.inbound.length               | 如果设置了密钥文件，入站隧道长度（默认：3）
+httpproxy.inbound.quantity             | 如果设置了密钥文件，入站隧道数量（默认：5）
+httpproxy.inbound.lengthVariance       | 如果设置了密钥文件，入站隧道长度方差（默认：0）
+httpproxy.outbound.length              | 如果设置了密钥文件，出站隧道长度（默认：3）
+httpproxy.outbound.quantity            | 如果设置了密钥文件，出站隧道数量（默认：5）
+httpproxy.outbound.lengthVariance      | 如果设置了密钥文件，出站隧道长度方差（默认：0）
+httpproxy.outproxy                     | HTTP 代理上游出站代理 URL（如 http://exit.stormycloud.i2p）
+httpproxy.addresshelper                | 启用或禁用 addresshelper（默认：true）
+httpproxy.senduseragent                | 若启用则透传用户的 User-Agent（默认：false）
+httpproxy.i2cp.leaseSetType            | 要发送的 LeaseSet 类型。1、3 或 5（默认：3）
+httpproxy.i2cp.leaseSetEncType         | 在 LeaseSet 类型为 3 或 5 时使用的加密类型，逗号分隔
+httpproxy.i2p.streaming.profile        | HTTP 代理带宽使用配置。1 - 批量（高），2 - 交互（低）（默认：1）
+httpproxy.i2p.streaming.maxWindowSize  | 流的最大窗口大小（默认：512）
 
-### SAM interface
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-sam.enabled                            | If SAM is enabled. (default: true)
-sam.address                            | The address to listen on (SAM bridge)
-sam.port                               | Port of SAM bridge. Usually 7656. SAM is off if not specified
-sam.singlethread                       | If false every SAM session runs in own thread. (default: true)
-
-### BOB interface
+### Socks 代理
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-bob.enabled                            | If BOB is enabled. (default: false)
-bob.address                            | The address to listen on (BOB command channel)
-bob.port                               | Port of BOB command channel. Usually 2827. BOB is off if not specified
+socksproxy.enabled                     | 是否启用 SOCKS 代理（默认：true）
+socksproxy.address                     | 监听地址（SOCKS 代理）
+socksproxy.port                        | 监听端口（SOCKS 代理）（默认：4447）
+socksproxy.keys                        | SOCKS 代理本地目的地的可选密钥文件
+socksproxy.signaturetype               | 如果设置了密钥文件，则用于新密钥的签名类型（默认：7）
+socksproxy.inbound.length              | 如果设置了密钥文件，入站隧道长度（默认：3）
+socksproxy.inbound.quantity            | 如果设置了密钥文件，入站隧道数量（默认：5）
+socksproxy.inbound.lengthVariance      | 如果设置了密钥文件，入站隧道长度方差（默认：0）
+socksproxy.outbound.length             | 如果设置了密钥文件，出站隧道长度（默认：3）
+socksproxy.outbound.quantity           | 如果设置了密钥文件，出站隧道数量（默认：5）
+socksproxy.outbound.lengthVariance     | 如果设置了密钥文件，出站隧道长度方差（默认：0）
+socksproxy.outproxy.enabled            | 启用或禁用 SOCKS5 出站代理（默认：false）
+socksproxy.outproxy                    | 出站代理地址（IP 或本地）。I2P 外的请求将发送到此处。
+socksproxy.outproxyport                | 出站代理端口。若为 0，socksproxy.outproxy 包含本地套接字路径
+socksproxy.i2cp.leaseSetType           | 要发送的 LeaseSet 类型。1、3 或 5（默认：3）
+socksproxy.i2cp.leaseSetEncType        | 在 LeaseSet 类型为 3 或 5 时使用的加密类型，逗号分隔
+socksproxy.i2p.streaming.profile       | SOCKS 代理带宽使用配置。1 - 批量（高），2 - 交互（低）（默认：1）
+socksproxy.i2p.streaming.maxWindowSize | 流的最大窗口大小（默认：512）
 
-### I2CP interface
+### SAM 接口
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-i2cp.enabled                           | If I2CP is enabled. (default: true)
-i2cp.address                           | The address to listen on or an abstract address for Android LocalSocket
-i2cp.port                              | Port of I2CP server. Usually 7654. Ignored for Andorid
-i2cp.singlethread                      | If false every I2CP session runs in own thread. (default: true)
-i2cp.inboundlimit                      | Client inbound limit in KBps to return in BandwidthLimitsMessage. Router's bandwidth if 0. (default:0)
-i2cp.outboundlimit                     | Client outbound limit in KBps to return in BandwidthLimitsMessage. Router's bandwidth if 0. (default:0)
+sam.enabled                            | 是否启用 SAM（默认：true）
+sam.address                            | 监听地址（SAM 桥）
+sam.port                               | SAM 桥端口。通常为 7656。若未指定则 SAM 关闭
+sam.singlethread                       | 若为 false，每个 SAM 会话在自己的线程中运行（默认：true）
 
-### I2PControl interface
+### BOB 接口
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-i2pcontrol.enabled                     | If I2P control is enabled. (default: false)
-i2pcontrol.address                     | The address to listen on (IP or path to local socket)
-i2pcontrol.port                        | Port of I2P control service. Usually 7650. If 0 i2pcontrol.address contains path to local socket
-i2pcontrol.password                    | I2P control authentication password. (default: itoopie)
-i2pcontrol.cert                        | I2P control HTTPS certificate file name. (default: i2pcontrol.crt.pem)
-i2pcontrol.key                         | I2P control HTTPS certificate key file name. (default: i2pcontrol.key.pem)
+bob.enabled                            | 是否启用 BOB（默认：false）
+bob.address                            | 监听地址（BOB 命令通道）
+bob.port                               | BOB 命令通道端口。通常为 2827。若未指定则 BOB 关闭
+
+### I2CP 接口
+
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+i2cp.enabled                           | 是否启用 I2CP（默认：true）
+i2cp.address                           | 监听地址，或 Android LocalSocket 的抽象地址
+i2cp.port                              | I2CP 服务器端口。通常为 7654。对 Android 忽略
+i2cp.singlethread                      | 若为 false，每个 I2CP 会话在自己的线程中运行（默认：true）
+i2cp.inboundlimit                      | 在 BandwidthLimitsMessage 中返回的客户端入站限制（KBps）。若为 0 则为路由器带宽（默认：0）
+i2cp.outboundlimit                     | 在 BandwidthLimitsMessage 中返回的客户端出站限制（KBps）。若为 0 则为路由器带宽（默认：0）
+
+### I2PControl 接口
+
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+i2pcontrol.enabled                     | 是否启用 I2P control（默认：false）
+i2pcontrol.address                     | 监听地址（IP 或本地套接字路径）
+i2pcontrol.port                        | I2P control 服务端口。通常为 7650。若为 0，则 i2pcontrol.address 包含本地套接字路径
+i2pcontrol.password                    | I2P control 认证密码（默认：itoopie）
+i2pcontrol.cert                        | I2P control HTTPS 证书文件名（默认：i2pcontrol.crt.pem）
+i2pcontrol.key                         | I2P control HTTPS 证书密钥文件名（默认：i2pcontrol.key.pem）
 
 ### UPNP
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-upnp.enabled                           | Enable or disable UPnP, false by default for CLI and true for GUI (Windows, Android)
-upnp.name                              | Name i2pd appears in UPnP forwardings list. (default: I2Pd)
+upnp.enabled                           | 启用或禁用 UPnP，CLI 默认为 false，GUI（Windows、Android）默认为 true
+upnp.name                              | i2pd 在 UPnP 转发表中的显示名称（默认：I2Pd）
 
-### Cryptography
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-precomputation.elgamal                 | Use ElGamal precomputated tables. (default: false for x86-64 and true for other platforms)
-
-### Reseeding
+### 密码学
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-reseed.verify                          | Verify .su3 signature. (default: false)
-reseed.urls                            | Reseed URLs, separated by comma
-reseed.yggurls                         | Reseed Yggdrasil's URLs, separated by comma
-reseed.file                            | Path to local .su3 file or HTTPS URL to reseed from
-reseed.zipfile                         | Path to local .zip file to reseed from
-reseed.threshold                       | Minimum number of known routers before requesting reseed. (default: 25)
-reseed.proxy                           | Url for https/socks reseed proxy
+precomputation.elgamal                 | 使用 ElGamal 预计算表（x86-64 默认为 false，其他平台为 true）
 
-### Addressbook options
+### 重新播种（Reseeding）
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-addressbook.enabled                    | Enable or disable AddressBook. (default: true)  
-addressbook.defaulturl                 | AddressBook subscription URL. Only used to initialize the AddressBook.
-addressbook.subscriptions              | AddressBook subscriptions URLs, separated by comma. Note that defaulturl is not added to subscriptions URLs
-addressbook.hostsfile                  | File to dump AddressesBook in hosts.txt format
+reseed.verify                          | 验证 .su3 签名（默认：false）
+reseed.urls                            | Reseed 的 URL，逗号分隔
+reseed.yggurls                         | Yggdrasil 的 Reseed URL，逗号分隔
+reseed.file                            | 本地 .su3 文件路径或用于 Reseed 的 HTTPS URL
+reseed.zipfile                         | 用于 Reseed 的本地 .zip 文件路径
+reseed.threshold                       | 在请求 Reseed 前已知路由器的最小数量（默认：25）
+reseed.proxy                           | https/socks Reseed 代理的 URL
 
-### Limits
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-limits.transittunnels                  | Override maximum number of transit tunnels. (default: 10000)
-limits.openfiles                       | Limit number of open file descriptors (default: 0 - use system limit)
-limits.coresize                        | Maximum size of corefile in Kb (default: 0 - use system limit)
-limits.zombies                         | Minimum percentage of successfully created tunnels under which tunnel cleanup is paused (default [%]: 0.00)
-
-### Trust options
+### 地址簿选项
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-trust.enabled                          | Enable explicit trust options. (default: false)
-trust.family                           | Make direct I2P connections only to routers in specified Family.
-trust.routers                          | Make direct I2P connections only to routers specified here. Comma separated list of base64 identities.
-trust.hidden                           | Should we hide our router from other routers? (default: false)
+addressbook.enabled                    | 启用或禁用地址簿（默认：true）  
+addressbook.defaulturl                 | 地址簿订阅 URL。仅用于初始化地址簿。
+addressbook.subscriptions              | 地址簿订阅的 URL，逗号分隔。注意 defaulturl 不会自动加入订阅 URL
+addressbook.hostsfile                  | 以 hosts.txt 格式导出地址簿的文件
 
-### Exploratory tunnels
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-exploratory.inbound.length             | Exploratory inbound tunnels length. (default: 2)
-exploratory.inbound.quantity           | Exploratory inbound tunnels quantity. (default: 3)
-exploratory.outbound.length            | Exploratory outbound tunnels length. (default: 2)
-exploratory.outbound.quantity          | Exploratory outbound tunnels quantity. (default: 3)
-
-### Shared local destination
+### 限制
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-shareddest.inbound.length              | Shared local destination inbound tunnels length. (default: 3)
-shareddest.inbound.quantity            | Shared local destination inbound tunnels quantity. (default: 3)
-shareddest.outbound.length             | Shared local destination outbound tunnels length. (default: 3)
-shareddest.outbound.quantity           | Shared local destination outbound tunnels quantity. (default: 3)
-shareddest.i2cp.leaseSetType           | Shared local destination's LeaseSet type. (default: 3)
-shareddest.i2cp.leaseSetEncType        | Shared local destination's LeaseSet encryption type. (default: 0,4)
-shareddest.i2p.streaming.profile       | Shared local destination bandwidth usage profile. (default: 2)
+limits.transittunnels                  | 覆盖中转隧道的最大数量（默认：10000）
+limits.openfiles                       | 限制打开的文件描述符数量（默认：0 - 使用系统限制）
+limits.coresize                        | core 文件的最大大小（KB）（默认：0 - 使用系统限制）
+limits.zombies                         | 若成功创建的隧道比例低于该最小百分比，则暂停隧道清理（默认 [%]：0.00）
 
-### Time sync
+### 信任选项
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-nettime.enabled                        | Enable NTP sync. (default: false)
-nettime.ntpservers                     | Comma-separated list of NTP server. (default: pool.ntp.org)
-nettime.ntpsyncinterval                | NTP time sync interval in hours. (default: 72)
+trust.enabled                          | 启用显式信任选项（默认：false）
+trust.family                           | 仅与指定 Family 中的路由器建立直接 I2P 连接
+trust.routers                          | 仅与此处指定的路由器建立直接 I2P 连接。以逗号分隔的 base64 身份列表
+trust.hidden                           | 我们是否应对其他路由器隐藏本路由器？（默认：false）
 
-### Network information persist
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-persist.profiles                       | Enable peer profile persisting to disk. (default: true)
-
-### Meshnets transports
+### 探测（Exploratory）隧道
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-meshnets.yggdrasil                     | Support transports through the Yggdrasil (default: false)
-meshnets.yggaddress                    | Local Yggdrasil's address to publish
+exploratory.inbound.length             | 探测入站隧道长度（默认：2）
+exploratory.inbound.quantity           | 探测入站隧道数量（默认：3）
+exploratory.outbound.length            | 探测出站隧道长度（默认：2）
+exploratory.outbound.quantity          | 探测出站隧道数量（默认：3）
 
-### Windows-specific options
-
-Option                                 | Description
--------------------------------------- | --------------------------------------
-insomnia                               | Prevent system from sleeping
-close                                  | Action on close: minimize, exit, ask
-
-### UNIX-specific options
+### 共享本地目的地
 
 Option                                 | Description
 -------------------------------------- | --------------------------------------
-unix.handle_sigtstp                    | Handle SIGTSTP and SIGCONT signals. (default: false)
+shareddest.inbound.length              | 共享本地目的地的入站隧道长度（默认：3）
+shareddest.inbound.quantity            | 共享本地目的地的入站隧道数量（默认：3）
+shareddest.outbound.length             | 共享本地目的地的出站隧道长度（默认：3）
+shareddest.outbound.quantity           | 共享本地目的地的出站隧道数量（默认：3）
+shareddest.i2cp.leaseSetType           | 共享本地目的地的 LeaseSet 类型（默认：3）
+shareddest.i2cp.leaseSetEncType        | 共享本地目的地的 LeaseSet 加密类型（默认：0,4）
+shareddest.i2p.streaming.profile       | 共享本地目的地的带宽使用配置（默认：2）
 
-`handle_sigtstp` enables handling of SIGTSTP and SIGCONT signals (*since 2.43.0*).
+### 时间同步
 
-SIGTSTP can be called using Ctrl+Z in terminal with running i2pd in it or by `kill` command. When signal recveived, i2pd will switch to offline mode and stop sending traffic and cleaning of netDb. All active tunnels will be frozen.
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+nettime.enabled                        | 启用 NTP 同步（默认：false）
+nettime.ntpservers                     | NTP 服务器的逗号分隔列表（默认：pool.ntp.org）
+nettime.ntpsyncinterval                | NTP 时间同步间隔（小时）（默认：72）
 
-To restore network connectivity you need to send SIGCONT signal to the proccess. Tunnels will be cleared if they should expire during the frozen state and new ones will be built.
+### 网络信息持久化
 
-Local addressbook
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+persist.profiles                       | 启用将对等体档案持久化到磁盘（默认：true）
+
+### 网状网络传输
+
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+meshnets.yggdrasil                     | 支持通过 Yggdrasil 的传输（默认：false）
+meshnets.yggaddress                    | 要发布的本地 Yggdrasil 地址
+
+### Windows 特定选项
+
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+insomnia                               | 防止系统休眠
+close                                  | 关闭时的动作：最小化、退出、询问
+
+### UNIX 特定选项
+
+Option                                 | Description
+-------------------------------------- | --------------------------------------
+unix.handle_sigtstp                    | 处理 SIGTSTP 与 SIGCONT 信号（默认：false）
+
+`handle_sigtstp` 启用对 SIGTSTP 和 SIGCONT 信号的处理（自 2.43.0 起）。
+
+可以使用在运行 i2pd 的终端里按 Ctrl+Z 或通过 `kill` 命令来发送 SIGTSTP。收到该信号后，i2pd 将切换到离线模式，停止发送流量并停止清理 netDb。所有活动隧道将被冻结。
+
+要恢复网络连接，你需要向该进程发送 SIGCONT 信号。若隧道在冻结状态期间到期，它们将被清除，并建立新的隧道。
+
+本地地址簿
 -----------------
 
-There is also a special addressbook config file in the working directory at `addressbook/local.csv`.
-It lets your routers to work as a resolver for 3ld domains if you run that 2ld address on your router and it' presented in addressbook.
-Only i2pd can resolve such addresses, by sending special datagram requests.
+工作目录中还有一个特殊的地址簿配置文件 `addressbook/local.csv`。
+如果你在路由器上运行该二级域（2ld）地址并且它已在地址簿中呈现，它可让你的路由器充当三级域（3ld）域名的解析器。
+只有 i2pd 能解析此类地址，通过发送特殊的数据报请求来完成。

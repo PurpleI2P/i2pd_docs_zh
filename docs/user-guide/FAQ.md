@@ -1,95 +1,79 @@
-## What is I2P?
+## 什么是 I2P？
 
-I2P (Invisible Internet Protocol) is a universal anonymous network layer. 
-All communications over I2P are anonymous and end-to-end encrypted, participants
-don't reveal their real IP addresses. 
+I2P（隐形互联网协议）是一个通用的匿名网络层。通过 I2P 的所有通信都是匿名且端到端加密的，参与者不会暴露其真实 IP 地址。
 
-I2P client is a software used for building and using anonymous I2P 
-networks. Such networks are commonly used for anonymous peer-to-peer 
-applications (filesharing, cryptocurrencies) and anonymous client-server 
-applications (websites, instant messengers, chat-servers).
+I2P 客户端是一种用于构建和使用匿名 I2P 网络的软件。这类网络常用于匿名点对点应用（文件共享、加密货币）以及匿名的客户端-服务器应用（网站、即时通讯、聊天服务器）。
 
-I2P allows people from all around the world to communicate and share information
-without restrictions.
+I2P 让世界各地的人们可以不受限制地交流和分享信息。
 
-A deeper technical introduction of I2P can be found [here](https://geti2p.net/en/docs/how/tech-intro).
+更深入的技术介绍见[此处](https://geti2p.net/en/docs/how/tech-intro)。
 
-## How i2pd differs from original I2P implementation?
+## i2pd 与原始的 I2P 实现有何不同？
 
-While [Java I2P](https://geti2p.net) and i2pd are both clients for the I2P network, i2pd has some big differences and advantages:
+虽然 [Java I2P](https://geti2p.net) 和 i2pd 都是 I2P 网络的客户端，但 i2pd 有一些重要的差异和优势：
 
-* Java I2P has built-in applications for torrents, e-mail and so on. i2pd is just a router which you can use with other software through I2CP interface.
-* i2pd does not require Java. It's written in C++.
-* i2pd consumes less memory and CPU.
-* i2pd can be compiled everywhere gcc or clang presented (including Raspberry and routers).
-* i2pd has some major optimizations for faster cryptography which leads to less consumption of processor time and energy.
+* Java I2P 内置了用于种子、电子邮件等的应用；i2pd 只是一个路由器，你可以通过 I2CP 接口将其与其他软件配合使用。
+* i2pd 不需要 Java。它使用 C++ 编写。
+* i2pd 占用更少的内存和 CPU。
+* 只要有 gcc 或 clang 的地方都可以编译 i2pd（包括树莓派和路由器）。
+* i2pd 针对加密做了重大优化，速度更快，从而减少处理器时间与能耗。
 
-## Why is the I2P network so slow and unstable sometimes?
+## 为什么 I2P 网络有时会很慢且不稳定？
 
-By design, in the I2P network, your connection gets encrypted through a chain of 6 
-random computers in the way to its final destination. If one of those computers
-is shut down, or experiences connectivity problems, it can take some time for your
-I2P router to discover and fix that issue. 
+根据设计，在 I2P 网络中，你的连接会通过由 6 台随机计算机构成的链路加密后到达最终目的地。如果其中某台计算机关机或出现连接问题，你的 I2P 路由器需要一段时间才能发现并修复该问题。
 
-## Help! i2pd is not working. What do I do?
+## 救命！i2pd 不工作了，我该怎么办？
 
-First of all, synchronize system clock on your machine with Internet.
+首先，将你的机器的系统时钟与互联网同步。
 
-If that does not help, on Linux machines, check the number of open file descriptors
-allowed to a process. In a terminal, run:
+如果仍然无效，在 Linux 机器上检查进程允许的打开文件描述符数量。在终端运行：
 
     ulimit -n
 
-Correct value for regular i2pd node is 4096, for a floodfill it is 8192. 
-Set it before you run i2pd like so:
+普通 i2pd 节点的合适值为 4096，floodfill 节点为 8192。像这样在运行 i2pd 前设置：
 
     ulimit -n 4096 && ./i2pd
 
-If that doesn't help, then you may have found a bug.
-Contact developers with IRC or create an issue on GitHub.
+如果还不行，你可能发现了一个缺陷。请通过 IRC 联系开发者或在 GitHub 上提交 issue。
 
-## What is good tunnel creation success rate value?
+## 隧道创建成功率达到多少算好？
 
-\>10%. Larger is better.
+\>10%。越高越好。
 
-## Is there a place I can use to find running I2P websites?
+## 有地方可以查找正在运行的 I2P 网站吗？
 
-Sure, there is a list [here](http://identiguy.i2p.xyz/)
+当然，可以在[这里](http://identiguy.i2p.xyz/)找到列表。
 
-## How can I better integrate my router to the network?
+## 我如何让我的路由器更好地融入网络？
 
-Edit your settings: set correct bandwidth and share rate. 
+调整设置：设定正确的带宽和分享比例。
 
-Run i2pd for a long time, download and seed some popular torrents.
+长时间运行 i2pd，下载并做种一些热门种子。
 
-## What browser should I use to browse I2P websites?
+## 我应该用什么浏览器访问 I2P 网站？
 
-Use any open source browser - for example, Firefox or a Chromium based alternative. Create separate profile for I2P ([firefox instructions](https://support.mozilla.org/en-US/kb/profile-manager-create-and-remove-firefox-profiles)), 
-and try not to mix clearnet browsing with I2P. Learn how to configure your browser for better privacy and security.
+使用任何开源浏览器，例如 Firefox 或基于 Chromium 的替代品。为 I2P 创建一个单独的配置文件（[Firefox 指南](https://support.mozilla.org/en-US/kb/profile-manager-create-and-remove-firefox-profiles)），尽量不要将明网浏览与 I2P 混用。学习如何配置浏览器以获得更好的隐私和安全性。
 
-Configuring [privoxy](https://wiki.archlinux.org/index.php/Privoxy) for I2P/onion/clearnet browsing at the same time is a good idea.
+同时为 I2P/onion/明网浏览配置 [privoxy](https://wiki.archlinux.org/index.php/Privoxy) 是个好主意。
 
-i2pd's socks proxy has an option to pass all non-I2P traffic to the Tor socks proxy. Make sure you know what are you doing when using this!
+i2pd 的 SOCKS 代理有一个选项，可以将所有非 I2P 流量转发到 Tor 的 SOCKS 代理。使用该功能时务必清楚自己在做什么！
 
-## What is a floodfill mode?
+## 什么是 floodfill 模式？
 
-Floodfill mode make your router a floodfill, that means what other routers will publish and get LeaseSets and RIs on your router. [Read more](http://geti2p.net/en/docs/how/network-database).
-Floodfill mode require more bandwith, CPU time. You can enable floodfill only if it has public ipv4 address and minimal bandwidth O: `floodfill = true`
+Floodfill 模式会把你的路由器变成一个 floodfill，这意味着其他路由器会在你的路由器上发布和获取 LeaseSet 和 RI。[了解更多](http://geti2p.net/en/docs/how/network-database)。
 
-## How is I2P different from Tor?
+Floodfill 模式需要更多带宽和 CPU 时间。只有当你的节点具有公共 IPv4 地址并满足最低带宽要求时，才应启用 floodfill。选项：`floodfill = true`
 
-I2P and Tor have some similarities, but they are completely different technologies.
+## I2P 与 Tor 有何不同？
 
-Tor is designed to act as an anonymous proxy for the regular Internet, and I2P 
-is specifically designed to make a virtual anonymous network for hidden services 
-and p2p applications. 
+I2P 和 Tor 有一些相似之处，但它们是完全不同的技术。
 
-Tor Project was started by the US military and receives most of its funds
-from the government, while I2P was started by a community of independent civilians.
+Tor 旨在作为常规互联网的匿名代理，而 I2P 专门用于构建用于隐藏服务和 P2P 应用的虚拟匿名网络。
 
-Tor is highly centralized by design, while I2P is designed to be decentralized and distributed.
+Tor 项目由美国军方发起，并从政府获得大部分资金；而 I2P 则由独立的民间社区发起。
 
-## Can use i2pd as a proxy for regular Internet?
+Tor 在设计上高度集中化，而 I2P 的设计是去中心化且分布式的。
 
-Yes, but better use [Tor](https://www.torproject.org/) for that.
+## 可以把 i2pd 用作常规互联网的代理吗？
 
+可以，但最好为此使用 [Tor](https://www.torproject.org/)。

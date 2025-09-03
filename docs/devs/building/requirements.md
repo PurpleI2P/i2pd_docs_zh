@@ -1,14 +1,14 @@
-Build requirements
+构建要求
 ==================
 
-In general, for building i2pd you need several things:
+一般来说，要构建 i2pd，你需要以下几样东西：
 
-* compiler with c++17 full support (for example: gcc >= 8, clang)
+* 完全支持 C++17 的编译器（例如：gcc >= 8、clang）
 * boost >= 1.66
-* openssl library >= 1.1.0
-* zlib library (openssl already depends on it)
+* OpenSSL 库 >= 1.1.0
+* zlib 库（OpenSSL 已经依赖它）
 
-Optional tools:
+可选工具：
 
-* cmake >= 2.8 (or 3.3+ if you want to use precompiled headers on windows)
-* miniupnp library (for upnp support)  
+* cmake >= 2.8（如果你想在 Windows 上使用预编译头，则需要 3.3+）
+* miniupnp 库（用于 UPnP 支持）

@@ -1,16 +1,13 @@
-Anonymous chat servers
+匿名聊天服务器
 ======================
 
-## Connect to anonymous IRC server
+## 连接到匿名 IRC 服务器
 
-You can connect to IRC servers in I2P by using **Socks proxy**. By default, it listens at ``127.0.0.1:4447`` 
-(look at [configuration docs](../user-guide/configuration.md) for details).
-Configure your IRC client to use this Socks proxy and connect to I2P servers just like to any other servers.
+你可以通过使用 Socks 代理连接 I2P 中的 IRC 服务器。默认情况下，它监听在 ``127.0.0.1:4447``（详情参见[配置文档](../user-guide/configuration.md)）。将你的 IRC 客户端配置为使用该 Socks 代理，然后像连接其他服务器一样连接到 I2P 服务器。
 
-*Alternatively*, you may want to create **client I2P tunnel** to specific server.
-This way, i2pd will "bind" IRC server port on your computer and you will be able to connect to server without modifying any IRC client settings.
+或者，你也可以为特定服务器创建一个客户端 I2P 隧道。这样，i2pd 会在你的计算机上“绑定”IRC 服务器端口，你无需修改任何 IRC 客户端设置即可连接到服务器。
 
-To connect to IRC server at *irc.ilita.i2p:6667*, add this to ~/.i2pd/tunnels.conf:
+要连接位于 irc.ilita.i2p:6667 的 IRC 服务器，将以下内容添加到 ~/.i2pd/tunnels.conf：
 
     [IRC2]
     type = client
@@ -20,17 +17,17 @@ To connect to IRC server at *irc.ilita.i2p:6667*, add this to ~/.i2pd/tunnels.co
     destinationport = 6667
     #keys = irc-client-key.dat
 
-Restart i2pd, then connect to irc://127.0.0.1:6669 with your IRC client.
+重启 i2pd，然后使用你的 IRC 客户端连接到 irc://127.0.0.1:6669。
 
-## Running anonymous IRC server
+## 运行匿名 IRC 服务器
 
-1) Run your IRC server software and find out which host:port it uses (for example, 127.0.0.1:5555).
+1) 运行你的 IRC 服务器软件，并确认它使用的主机与端口（例如 127.0.0.1:5555）。
 
-   For small private IRC servers you can use [miniircd](https://github.com/jrosdahl/miniircd), for large public networks [UnreadIRCd](https://www.unrealircd.org/).
+   对于小型私有 IRC 服务器，你可以使用 [miniircd](https://github.com/jrosdahl/miniircd)，对于大型公共网络，可以使用 [UnreadIRCd](https://www.unrealircd.org/)。
 
-2) Configure i2pd to create IRC server tunnel.
+2) 配置 i2pd 以创建 IRC 服务器隧道。
 
-   Simplest case, if your server does not support WebIRC, add this to ~/.i2pd/tunnels.conf:
+   最简单的情况，如果你的服务器不支持 WebIRC，将以下内容加入 ~/.i2pd/tunnels.conf：
 
 ```
 [anon-chatserver]
@@ -40,9 +37,9 @@ port = 5555
 keys = chatserver-key.dat
 ```
 
-   And that is it.
+   就这些。
 
-   Alternatively, if your IRC server supports WebIRC, for example, UnreadIRCd, put this into UnrealIRCd config:
+   或者，如果你的 IRC 服务器支持 WebIRC，例如 UnreadIRCd，在 UnrealIRCd 配置中加入：
 
 ```
 webirc {
@@ -51,15 +48,15 @@ webirc {
 };
 ```
 
-   Also change line:
+   还需将以下行：
 
     modes-on-connect "+ixw";
 
-   to
+   修改为
 
     modes-on-connect "+iw";
 
-   And this in ~/.i2pd/tunnels.conf:
+   然后在 ~/.i2pd/tunnels.conf 中加入：
 
     [anon-chatserver]
     type = irc
@@ -68,35 +65,35 @@ webirc {
     keys = chatserver-key.dat
     webircpassword = your_password
 
-3) Securing UnrealIRCd
+3) 加固 UnrealIRCd
 
-   By default if you run an I2Pd service, I2P will connect to the IRCd at localhost using IP 127.0.0.1
+   默认情况下，如果你运行 I2Pd 服务，I2P 将使用 IP 127.0.0.1 在本地主机上连接到 IRCd。
    
-   This is bad for two reasons:
+   这有两个问题：
    
-   First, you would be unable to separate I2P traffic from other localhost traffic.
-   Second, all I2P users would be unbanable because 127.0.0.1 is exempt from all bans, including glines.
+   第一，你将无法区分来自 I2P 的流量与其他本地主机流量。
+   第二，所有 I2P 用户都将无法被封禁，因为 127.0.0.1 被排除在所有封禁之外，包括 glines。
 
-   So, we can fake host to separate localhost traffic from i2pd traffic.
+   因此，我们可以伪造主机以将本地主机流量与 i2pd 流量分离。
 
-   To do this, we will create the directory that UnrealIRCd will access and create the socket file:
+   为此，我们将创建 UnrealIRCd 将要访问的目录并创建套接字文件：
 
 ```
     mkdir /etc/i2pd/unrealircd
     chown unrealircd:unrealircd /etc/i2pd/unrealircd
     chmod 750 /etc/i2pd/unrealircd
 ```
-   NOTE: This assumes your IRCd user is called unrealircd. If not, change the unrealircd:unrealircd in the chown command of above.
+   注意：这里假设你的 IRCd 用户名为 unrealircd。如果不是，请在上面的 chown 命令中将 unrealircd:unrealircd 改为实际的用户与组。
 
-   If you are on Debian/Ubuntu and have AppArmor installed (you probably do!) then run the next few commands. If you don't do this then everything will fail mysteriously later.
+   如果你在 Debian/Ubuntu 上并安装了 AppArmor（很可能是的！），请运行接下来的命令。如果不执行这些步骤，那么后续一切可能会莫名其妙地失败。
 
-   Still as root, run:
+   仍以 root 身份运行：
 ```
     echo "/etc/i2pd/unrealircd/ip2d_ircd.socket rw," >>/etc/apparmor.d/local/system_i2pd
     apparmor_parser -r /etc/apparmor.d/system_i2pd
 ```
 
-   Configure UnrealIRCd, adding this to your unrealircd.conf file:
+   配置 UnrealIRCd，将以下内容添加到你的 unrealircd.conf 文件中：
 ```
     listen {
     file "/etc/i2pd/unrealircd/i2pd_ircd.socket";
@@ -105,7 +102,7 @@ webirc {
     }
 ```
 
-   And to turn off ban checking:
+   并关闭封禁检查：
 ```
    except ban {
     mask { ip 127.0.0.3; }
@@ -113,19 +110,18 @@ webirc {
     }
 ```
    
-   We will create a communication that act like bridge between a TCP/IP on port 5555 and UNIX socket located at "/etc/i2pd/unrealircd/i2pd_ircd.socket".
+   我们将创建一个通信桥，将 TCP/IP 端口 5555 与位于 “/etc/i2pd/unrealircd/i2pd_ircd.socket” 的 UNIX 套接字连接起来。
 
-   Just run:
+   只需运行：
 ```
     socat TCP-LISTEN:5555,bind=localhost,reuseaddr,fork UNIX-CONNECT:/etc/i2pd/unrealircd/i2pd_ircd.socket &
 ```
-   This way, when users connecting on I2P tunnel client address, they will be redirect to 127.0.0.1:5555 that will bridge to Unix Socket created by UnrealIrcd, that come up with an IP 127.0.0.3 and exempt them from ban checking.
+   这样，当用户连接到 I2P 隧道客户端地址时，他们会被重定向到 127.0.0.1:5555，而该端口会桥接到 UnrealIrcd 创建的 Unix 套接字，从而以 127.0.0.3 的 IP 出现，并将其排除在封禁检查之外。
 
-4) Restart i2pd.
+4) 重启 i2pd。
 
-5) Find b32 destination of your anonymous IRC server.
+5) 查找你的匿名 IRC 服务器的 b32 目标地址。
 
-   Go to webconsole -> [I2P tunnels page](http://127.0.0.1:7070/?page=i2p_tunnels). Look for Sever tunnels and you will see address like \<long random string\>.b32.i2p next to anon-chatserver.
+   进入 web 控制台 -> [I2P 隧道页面](http://127.0.0.1:7070/?page=i2p_tunnels)。查看 Sever tunnels，你会在 anon-chatserver 旁看到类似 \<long random string\>.b32.i2p 的地址。
 
-   Clients will use this address to connect to your server anonymously.
-   
+   客户端将使用该地址匿名连接到你的服务器。

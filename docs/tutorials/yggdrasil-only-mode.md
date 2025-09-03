@@ -1,7 +1,7 @@
-# Yggdrasil only router configuration
+# 仅通过 Yggdrasil 的路由器配置
 
-For a router talking to other routers and reseed servers through Yggdrasil only.  
-Start yggdrasil first and make sure you're running from a fresh i2pd installation. Create `~/.i2pd/i2pd.conf`
+适用于仅通过 Yggdrasil 与其他路由器和 reseed 服务器通信的路由器。  
+先启动 yggdrasil，并确保你使用的是全新的 i2pd 安装。创建 `~/.i2pd/i2pd.conf`
 
 ```
 daemon=true # note: remove it if you running on Windows!
@@ -13,8 +13,8 @@ ssu2.enabled=false
 meshnets.yggdrasil=true  
 ```
 
-If you use Yggdrasil subnet and want to bind your router to a particular address specify it with
-`meshnets.yggaddress=` your local yggdrasil address
+如果你使用 Yggdrasil 子网，并希望将路由器绑定到特定地址，请使用
+`meshnets.yggaddress=` 指定你的本地 yggdrasil 地址
 
-Start i2pd, it will also reseed from an yggdrasil reseed server. No clearnet communication is involved.   
-Important: Make sure that the system clock is syncronized.  
+启动 i2pd，它还会从 Yggdrasil 的 reseed 服务器进行 reseed。不会涉及明网通信。   
+重要：确保系统时钟已同步。

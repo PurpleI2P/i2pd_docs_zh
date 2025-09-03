@@ -1,24 +1,24 @@
-Building on Android
+在 Android 上构建
 ===================
 
-### Note: *Build works ONLY on Linux systems. Current documentation shows how to build application on Ubuntu 18.04*
+### 注意：构建仅在 Linux 系统上可用。当前文档展示如何在 Ubuntu 18.04 上构建应用
 
-Pre-requisites
+先决条件
 --------------
 
-You need to install `rename` (required for building libraries), `OpenJDK` 11+, `gradle` 5.1+ and `Android SDK`.
+你需要安装用于构建库所需的 `rename`、`OpenJDK` 11+、`gradle` 5.1+ 以及 `Android SDK`。
 
 ```
 sudo apt-get install g++ rename openjdk-11-jdk gradle
 ```
 
-- Android [SDK](https://developer.android.com/studio#downloads) (choose command line tools only)
-- If your system provides gradle with version < 5.1, download it from [Gradle](https://gradle.org/install/) homepage
+- Android [SDK](https://developer.android.com/studio#downloads)（仅选择命令行工具）
+- 如果系统提供的 gradle 版本低于 5.1，请从 [Gradle](https://gradle.org/install/) 主页下载
 
-Dependencies
+依赖
 ------------
 
-Prepare Android SDK and install required packages
+准备 Android SDK 并安装所需组件
 
 ```bash
 mkdir /tmp/android-sdk
@@ -29,12 +29,12 @@ unzip commandlinetools-linux-*_latest.zip
 ./cmdline-tools/bin/sdkmanager --sdk_root=/opt/android-sdk "build-tools;31.0.0" "cmake;3.18.1" "ndk;21.4.7075529"
 ```
 
-Clone repository with submodules
+克隆包含子模块的仓库
 ```bash
 git clone --recurse-submodules https://github.com/PurpleI2P/i2pd-android.git
 ```
 
-Compile required libraries
+编译所需库
 
 ```bash
 export ANDROID_SDK_ROOT=/opt/android-sdk
@@ -47,27 +47,27 @@ pushd app/jni
 popd
 ```
 
-Building Android application
+构建 Android 应用
 --------
 
-### Build application
+### 构建应用
 
-- Create `local.properties` file with path to SDK and NDK
+- 创建包含 SDK 与 NDK 路径的 `local.properties` 文件
 
   ```
   sdk.dir=/opt/android-sdk
   ndk.dir=/opt/android-sdk/ndk/21.4.7075529
   ```
 
-- Run `gradle clean assembleDebug`
-- You will find an .apk file in `app/build/outputs/apk` folder
+- 运行 `gradle clean assembleDebug`
+- 你将在 `app/build/outputs/apk` 目录下找到 .apk 文件
 
-### Creating release .apk
+### 创建发布版 .apk
 
-In order to create release .apk you must obtain a Java keystore file(.jks). Either you have in already, or you can generate it yourself using keytool, or from one of you existing well-known certificates.
-For example, i2pd release are signed with this [certificate](https://raw.githubusercontent.com/PurpleI2P/i2pd/9000b3df4edcbe7f2c8afd0e1e30609746311ace/contrib/certificates/router/orignal_at_mail.i2p.crt).
+要创建发布版 .apk，你必须获得一个 Java keystore 文件（.jks）。你可以已拥有，或使用 keytool 自行生成，或基于你已有的某个知名证书生成。
+例如，i2pd 的发布版是用这个[证书](https://raw.githubusercontent.com/PurpleI2P/i2pd/9000b3df4edcbe7f2c8afd0e1e30609746311ace/contrib/certificates/router/orignal_at_mail.i2p.crt)签名的。
 
-Change file `app\build.gradle` by replacing pre-defined values with your own
+修改文件 `app\build.gradle`，用你自己的值替换预设值
 
 ```
 release {
@@ -78,17 +78,17 @@ release {
 }
 ```
 
-Run `gradle clean assembleRelease`
+运行 `gradle clean assembleRelease`
 
-Building executable binary
+构建可执行二进制
 ------------------------------
 
-- Set environment variables:
+- 设置环境变量：
 
   ```
   export ANDROID_SDK_ROOT=/opt/android-sdk
   export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/21.4.7075529
   ```
 
-- Run `$ANDROID_NDK_HOME/ndk-build -j <threads> NDK_MODULE_PATH=$PWD` from `binary/jni` folder
-- You will find an `i2pd` executable in `binary/libs/<architecture>` folder
+- 在 `binary/jni` 目录运行 `$ANDROID_NDK_HOME/ndk-build -j <threads> NDK_MODULE_PATH=$PWD`
+- 你将在 `binary/libs/<architecture>` 目录下找到 `i2pd` 可执行文件

@@ -1,24 +1,24 @@
-Building on iOS
+在 iOS 上构建
 ===================
 
-How to build i2pd for iOS 9 and iOS Simulator 386/x64
+如何为 iOS 9 和 iOS 模拟器 386/x64 构建 i2pd
 
-Prerequisites
+先决条件
 --------------
 
-XCode7+, cmake 3.2+
+Xcode 7+，cmake 3.2+
 
-Dependencies
+依赖项
 ------------
 
-- precompiled openssl
-- precompiled boost with modules `filesystem`, `program_options`, `date_time` and `system`
-- ios-cmake toolchain from `https://github.com/vovasty/ios-cmake.git`
+- 预编译的 openssl
+- 预编译的 boost，包含模块 `filesystem`、`program_options`、`date_time` 和 `system`
+- 来自 `https://github.com/vovasty/ios-cmake.git` 的 ios-cmake 工具链
 
-Building
+构建
 --------
 
-Assume you have folder structure
+假设你的目录结构如下
 
 	lib/
 		libboost_date_time.a
@@ -75,11 +75,11 @@ libtool -static -o lib/libi2pd.a build/*/libi2pd.a
 cp i2pd/*.h include/i2pd
 ```
 
-Include into project
+集成到项目
 --------------------
 
-- add all libraries in `lib` folder to `Project linked frameworks`.
-- add `libc++` and `libz` libraries from system libraries to `Project linked frameworks`.
-- add path to i2p headers to your `Headers search paths`
+- 将 `lib` 文件夹中的所有库添加到 `Project linked frameworks`。
+- 从系统库中添加 `libc++` 和 `libz` 到 `Project linked frameworks`。
+- 将 i2p 头文件的路径添加到你的 `Headers search paths`。
 
-Alternatively you may use swift wrapper `https://github.com/vovasty/SwiftyI2P.git`
+或者，你可以使用 swift 封装 `https://github.com/vovasty/SwiftyI2P.git`

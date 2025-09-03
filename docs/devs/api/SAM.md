@@ -1,4 +1,4 @@
-SAM interface
+SAM 接口
 =============
 
-SAM interface is documented [here](https://geti2p.net/en/docs/api/samv3)
+SAM 接口的文档在[此处](https://geti2p.net/zh/docs/api/samv3)

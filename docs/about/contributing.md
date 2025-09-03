@@ -1,18 +1,18 @@
-Contributing
+贡献
 ============
 
-Coding guideline
+编码指南
 ----------------
 
-1. Dependencies
-   -  Files from `libi2pd` must not depend on files from `libi2pdclient` and `i2pd`.
-   -  Files from `libi2pdclient` can depend on files from `libi2pd` but not on `i2pd`.
-      You can find it in the fileslist.mk
-2. You can use C++11, but make sure code is buildable by `gcc 4.6`
-3. Don't reinvent a wheel.
-   - Try to find appropriate solution in std or boost.
-   - If a feature is presented in both, use std.
-5. Don't bring any additional dependency without discussion.
-   - However `boost`, `openssl` and `zlib` can be used in any amount.
-7. No requirements for formatting or coding style. You can do whatever you like.
-8. When you work with binary data, mind endianness. Use functions from `I2PEndian.h`
+1. 依赖关系
+   - `libi2pd` 中的文件不得依赖 `libi2pdclient` 和 `i2pd` 中的文件。
+   - `libi2pdclient` 中的文件可以依赖 `libi2pd`，但不能依赖 `i2pd`。
+     你可以在 `fileslist.mk` 中找到相关信息。
+2. 你可以使用 C++11，但请确保代码能用 `gcc 4.6` 构建。
+3. 不要重复造轮子。
+   - 尽量在 std 或 boost 中寻找合适的解决方案。
+   - 如果 std 和 boost 都提供该功能，优先使用 std。
+5. 未经讨论不要引入任何额外依赖。
+   - 不过可以任意使用 `boost`、`openssl` 和 `zlib`。
+7. 对格式或编码风格没有要求。你可以按你喜欢的方式来。
+8. 处理二进制数据时要注意大小端问题。请使用 `I2PEndian.h` 中的函数。

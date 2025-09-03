@@ -1,23 +1,23 @@
-Cross compilation notes
+交叉编译说明
 =======================
 
-Static 64 bit windows binary on Ubuntu 15.10 (Wily Werewolf)
+在 Ubuntu 15.10（Wily Werewolf）上构建静态 64 位 Windows 可执行文件
 ------------------------------------------------------------
 
-Install cross compiler and friends
+安装交叉编译器及相关工具
 
 	sudo apt-get install g++-mingw-w64-x86-64
 
-Default is to use Win32 threading model which lacks std::mutex and such. So we change defaults
+默认使用 Win32 线程模型，它缺少 std::mutex 等。因此我们要更改默认设置
 
 	sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
 
-From now on we assume we have everything in `~/dev/`. Get Boost sources unpacked into `~/dev/boost_1_60_0/` and change directory to it.
-Now add out cross compiler configuration. Warning: the following will wipe out whatever you had in there.
+从现在起，我们假定所有内容都在 `~/dev/`。获取 Boost 源码并解压到 `~/dev/boost_1_60_0/`，并切换到该目录。
+现在添加我们的交叉编译器配置。警告：下面的操作会清空你之前在该文件中的内容。
 
 	echo "using gcc : mingw : x86_64-w64-mingw32-g++ ;" > ~/user-config.jam
 
-Proceed with building Boost normal way, but let's define dedicated staging directory
+按常规方式构建 Boost，但我们定义一个专用的 staging 目录
 
 	./bootstrap.sh
 	./b2 toolset=gcc-mingw target-os=windows variant=release link=static runtime-link=static address-model=64 \
@@ -25,7 +25,7 @@ Proceed with building Boost normal way, but let's define dedicated staging direc
 	  --stagedir=stage-mingw-64
 	cd ..
 
-Now we get & build OpenSSL
+现在获取并构建 OpenSSL
 
 	git clone https://github.com/openssl/openssl
 	cd openssl
@@ -38,7 +38,7 @@ Now we get & build OpenSSL
 	make install
 	cd ..
 
-...and zlib
+……以及 zlib
 
 	git clone https://github.com/madler/zlib
 	cd zlib
@@ -48,7 +48,7 @@ Now we get & build OpenSSL
 	make install
 	cd ..
 
-Now we prepare cross toolchain hint file for CMake, let's name it `~/dev/toolchain-mingw.cmake`
+现在为 CMake 准备交叉工具链提示文件，命名为 `~/dev/toolchain-mingw.cmake`
 
 	set(CMAKE_SYSTEM_NAME Windows)
 	set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
@@ -57,8 +57,8 @@ Now we prepare cross toolchain hint file for CMake, let's name it `~/dev/toolcha
 	set(CMAKE_FIND_ROOT_PATH /usr/x86_64-w64-mingw32)
 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 
-Download miniupnpc, unpack and symlink it into `~/dev/miniupnpc/`.
-Finally, we can build i2pd with all that goodness
+下载 miniupnpc，解压并将其符号链接至 `~/dev/miniupnpc/`。
+最后，我们可以利用以上成果构建 i2pd
 
 	git clone https://github.com/PurpleI2P/i2pd
 	mkdir i2pd-mingw-64-build
@@ -71,4 +71,4 @@ Finally, we can build i2pd with all that goodness
 	make
 	x86_64-w64-mingw32-strip i2pd.exe
 
-By now, you should have a release build with stripped symbols.
+至此，你应该得到一个去除符号的发布版本构建。

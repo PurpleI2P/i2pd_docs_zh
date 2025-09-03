@@ -1,59 +1,60 @@
-i2pd-specific changes to I2P protocols
+i2pd 对 I2P 协议的特定更改
 ======================================
 
 # SAM
-SESSION CREATE and DEST GENERATE support additional parameter `CRYPTO_TYPE` specifying crypto type for new local destination  
+SESSION CREATE 和 DEST GENERATE 支持额外参数 `CRYPTO_TYPE`，用于为新的本地目的地指定加密类型  
 
-new values for `SIGNATURE_TYPE`:
-- `GOST_GOSTR3411256_GOSTR3410CRYPTOPROA` or `9`
-- `GOST_GOSTR3411512_GOSTR3410TC26A512` or `10`
+`SIGNATURE_TYPE` 的新值：
+- `GOST_GOSTR3411256_GOSTR3410CRYPTOPROA` 或 `9`
+- `GOST_GOSTR3411512_GOSTR3410TC26A512` 或 `10`
 
 # I2PControl
-`i2p.router.status` is 1 if shared local destination is ready, and 0 if not  
-`i2p.router.net.tunnels.successrate` returns tunnel creation success rate in percents  
-`i2p.router.net.total.received.bytes` returns total received bytes since last restart  
-`i2p.router.net.total.sent.bytes` returns total sent bytes since last restart  
+`i2p.router.status` 在共享本地目的地已就绪时为 1，否则为 0  
+`i2p.router.net.tunnels.successrate` 返回隧道创建成功率（百分比）  
+`i2p.router.net.total.received.bytes` 返回自上次重启以来接收的总字节数  
+`i2p.router.net.total.sent.bytes` 返回自上次重启以来发送的总字节数  
+
 # BOB
-Unlike Java-I2P, i2pd keep supporting BOB with the following extensions:
+与 Java-I2P 不同，i2pd 继续支持 BOB，并具有以下扩展：
 
-## Session Management
+## 会话管理
 
-- zap — Terminates the BOB service entirely, closing all active sessions and stopping the service from accepting new connections.
-- quit — Ends the current user session with BOB without shutting down the service itself.
+- zap —— 完全终止 BOB 服务，关闭所有活动会话，并阻止服务接受新的连接。
+- quit —— 结束当前用户与 BOB 的会话，而不关闭服务本身。
 
-## Tunnel Control
+## 隧道控制
 
-- start — Initiates the tunnel associated with the current nickname.
-- stop — Stops the tunnel associated with the current nickname.
-- status `<NICKNAME>` — Displays the status of the tunnel identified by the specified nickname.
-- list — Lists all configured tunnels.
-- clear — Removes the current nickname from the list of configured tunnels.
+- start —— 启动与当前昵称关联的隧道。
+- stop —— 停止与当前昵称关联的隧道。
+- status `<NICKNAME>` —— 显示由指定昵称标识的隧道状态。
+- list —— 列出所有已配置的隧道。
+- clear —— 从已配置隧道列表中移除当前昵称。
 
-## Nickname and Key Management
+## 昵称与密钥管理
 
-- setnick `<NICKNAME>` — Creates a new nickname for a tunnel.
-- getnick `<TUNNELNAME>` — Sets the current nickname to the one associated with the specified tunnel name.
-- newkeys `[signaturetype]` — Generates a new key pair (public and private keys) for the current nickname.
-By default, this uses the DSA signature type and ElGamal encryption.
-To generate keys with a specific signature type (e.g., EdDSA), specify the desired type:
-For example, newkeys 7 generates an EdDSA key pair (supported only in i2pd).
-- getkeys — Retrieves the current key pair for the current nickname.
-- setkeys `<BASE64_KEYPAIR>` — Sets the key pair for the current nickname using the provided BASE64-encoded key pair.
-- getdest — Returns the destination for the current nickname.
+- setnick `<NICKNAME>` —— 为隧道创建一个新的昵称。
+- getnick `<TUNNELNAME>` —— 将当前昵称设置为与指定隧道名称关联的昵称。
+- newkeys `[signaturetype]` —— 为当前昵称生成一对新的密钥（公钥和私钥）。  
+  默认使用 DSA 签名类型和 ElGamal 加密。  
+  要用特定签名类型（例如 EdDSA）生成密钥，请指定所需类型：  
+  例如，newkeys 7 生成一对 EdDSA 密钥（仅在 i2pd 中受支持）。
+- getkeys —— 获取当前昵称的密钥对。
+- setkeys `<BASE64_KEYPAIR>` —— 使用提供的 BASE64 编码密钥对为当前昵称设置密钥对。
+- getdest —— 返回当前昵称的目的地。
 
-## Tunnel Configuration
+## 隧道配置
 
-- outhost `<HOSTNAME|IP>` — Sets the outbound hostname or IP address for the tunnel.
-- outport `<PORT_NUMBER>` — Sets the outbound port number that the tunnel will contact.
-- inhost `<HOSTNAME|IP>` — Sets the inbound hostname or IP address for the tunnel.
-- inport `<PORT_NUMBER>` — Sets the inbound port number that the tunnel will listen on.
-- quiet `<True|False>` — Determines whether to send the incoming destination information.
-- option `<KEY>=<VALUE>` — Sets an option for the current tunnel. Note: Do not use spaces in the key or value.
-- settunneltype `<socks|httpproxy>` — Sets the tunnel type to either SOCKS or HTTP proxy.
+- outhost `<HOSTNAME|IP>` —— 设置隧道的出站主机名或 IP 地址。
+- outport `<PORT_NUMBER>` —— 设置隧道将要联系的出站端口号。
+- inhost `<HOSTNAME|IP>` —— 设置隧道的入站主机名或 IP 地址。
+- inport `<PORT_NUMBER>` —— 设置隧道监听的入站端口号。
+- quiet `<True|False>` —— 决定是否发送入站目的地信息。
+- option `<KEY>=<VALUE>` —— 为当前隧道设置一个选项。注意：键或值中不要使用空格。
+- settunneltype `<socks|httpproxy>` —— 将隧道类型设置为 SOCKS 或 HTTP 代理。
 
-## Additional Commands
+## 其他命令
 
-- lookup `<I2P_HOSTNAME>` — Performs a lookup for the specified I2P hostname and returns its destination.
-- lookuplocal `<I2P_HOSTNAME>` — looks for LeaseSet with specified address in router's netdb
-- ping `<I2P_HOSTNAME>` - Pings remote destination. Returns "pong from `<BASE32_ADDRESS>`: time=`<VALUE>` ms" if success and "timeout" is not
-- help `<COMMAND>` — Provides help information for the specified command. If no command is specified, lists all available commands.
+- lookup `<I2P_HOSTNAME>` —— 对指定 I2P 主机名执行查询并返回其目的地。
+- lookuplocal `<I2P_HOSTNAME>` —— 在路由器的 netdb 中查找具有指定地址的 LeaseSet。
+- ping `<I2P_HOSTNAME>` —— Ping 远程目的地。成功时返回 "pong from `<BASE32_ADDRESS>`: time=`<VALUE>` ms"，否则返回 "timeout"。
+- help `<COMMAND>` —— 提供指定命令的帮助信息；若未指定命令，则列出所有可用命令。

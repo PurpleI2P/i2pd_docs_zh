@@ -1,17 +1,17 @@
-Bootstrapping without Reseed Servers
+无需 Reseed 服务器的引导
 ==============================================
 
-In some cases I2P's default reseed servers (servers used to fill I2P router's netdb with initial peers) are blocked.
+在某些情况下，I2P 的默认 reseed 服务器（用于为 I2P 路由器的 netdb 填充初始节点的服务器）可能会被屏蔽。
 
-i2pd has a unique feature that allows it to bootstrap off of any I2P router that is participating in the DHT, they are called floodfill routers and have the router capacity `f` in their router info.
+i2pd 有一个独特功能，允许它从任何参与 DHT 的 I2P 路由器进行引导，这些路由器称为 floodfill 路由器，并且在其路由器信息中具有路由能力 `f`。
 
-## How To
+## 如何操作
 
-* obtain a `router.info` file of a floodfill router out of band, save to `/tmp/floodfill.router.info` or some other path
-* run `i2pd --reseed.floodfill=/tmp/floodfill.router.info` and if that router is online you'll be able to bootstrap into the network from just that routers
+* 通过带外方式获取某个 floodfill 路由器的 `router.info` 文件，保存到 `/tmp/floodfill.router.info` 或其他路径
+* 运行 `i2pd --reseed.floodfill=/tmp/floodfill.router.info`，如果该路由器在线，你将能够仅通过该路由器引导进入网络
 
-## Caveats
+## 注意事项
 
-* The floodfill *must* be trustworthy, it could give you all colluding peers if it's a baddie.
-* *DO NOT* use a random floodfill unless you don't care about high security and just want to test out this feature.
-* Java I2P routers seem to dislike this feature (sometimes) and may back off exponentially
+* 该 floodfill 必须是可信的；如果它是恶意的，它可能会向你返回全部为同伙的对等节点。
+* 除非你不在乎高安全性、只是想测试此功能，否則请勿使用随机的 floodfill。
+* Java I2P 路由器似乎（有时）不喜欢这个功能，并且可能会进行指数级退避。

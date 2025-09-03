@@ -1,13 +1,13 @@
-Decentralized instant messaging
+去中心化即时通讯
 ===============================
 
-> Extensible Messaging and Presence Protocol (XMPP) is an open XML technology for real-time communication, which powers a wide range of applications including instant messaging, presence and collaboration.
+> 可扩展消息与状态协议（XMPP）是一种用于实时通信的开放 XML 技术，支持包括即时消息、在线状态与协作在内的广泛应用。
 
-This tutorial shows you how to run your own [XMPP](https://xmpp.org/about/) server inside I2P network. That server can be used for decentralized instant messaging and for building any other applications with XMPP protocol.
- 
-## Creating server I2P tunnel
+本教程将向你展示如何在 I2P 网络中运行你自己的 [XMPP](https://xmpp.org/about/) 服务器。该服务器可用于去中心化即时通讯，并可基于 XMPP 协议构建其他应用。
 
-Write the following lines in `tunnels.conf` file:
+## 创建服务器 I2P 隧道
+
+在 `tunnels.conf` 文件中写入以下内容：
 
     [prosody-s2s]
     type=server
@@ -23,21 +23,21 @@ Write the following lines in `tunnels.conf` file:
     inport=5222
     keys=prosody.dat
 
-If you plan to use messenger only on a local host, prosody-c2s section may be omitted. Restart i2pd to apply new settings and look at webconsole http://127.0.0.1:7070/ page `I2P tunnels` for a new I2P address:
+如果你仅打算在本地主机上使用即时通讯，则可以省略 prosody-c2s 部分。重启 i2pd 以应用新设置，并在网页控制台 http://127.0.0.1:7070/ 的 “I2P tunnels” 页面查看新的 I2P 地址：
 
 ![img](media/xmpp-2.png)
 
-Save this xxx.b32.i2p address, it will be a domain name of your XMPP server.
+保存这个 xxx.b32.i2p 地址，它将作为你的 XMPP 服务器的域名。
 
-## Installing and configuring XMPP server
+## 安装与配置 XMPP 服务器
 
-We will use [prosody](https://prosody.im/) XMPP server, it is the most lightweight and has ready to use module for I2P. Installation instructions are available at [official documentation](https://prosody.im/download/start), in Debian/Ubutntu just run `apt install prosody`.
+我们将使用 [prosody](https://prosody.im/) XMPP 服务器，它最为轻量，并且已有可直接使用的 I2P 模块。安装说明参见[官方文档](https://prosody.im/download/start)，在 Debian/Ubuntu 上直接运行 `apt install prosody` 即可。
 
-bit32 library for lua is required for `mod_darknet` module. If your lua version is less than 5.2 (most likely), run `apt install lua-bit32`.
+`mod_darknet` 模块需要 Lua 的 bit32 库。如果你的 Lua 版本低于 5.2（很可能如此），运行 `apt install lua-bit32`。
 
-Install [mod_darknet](https://github.com/majestrate/mod_darknet) module. Download [this file](https://raw.githubusercontent.com/majestrate/mod_darknet/master/mod_darknet.lua) to prosody modules directory, usually it is `/usr/lib/prosody/modules`.
+安装 [mod_darknet](https://github.com/majestrate/mod_darknet) 模块。将[这个文件](https://raw.githubusercontent.com/majestrate/mod_darknet/master/mod_darknet.lua)下载到 prosody 模块目录，通常为 `/usr/lib/prosody/modules`。
 
-Edit config file `/etc/prosody/prosody.cfg.lua`. Replace xxx.b32.i2p with your address:
+编辑配置文件 `/etc/prosody/prosody.cfg.lua`。将 xxx.b32.i2p 替换为你的地址：
 
     interfaces = { "127.0.0.1" };
     admins = { "admin@xxx.b32.i2p" };
@@ -66,44 +66,44 @@ Edit config file `/etc/prosody/prosody.cfg.lua`. Replace xxx.b32.i2p with your a
         certificate = "/etc/prosody/certs/xxx.b32.i2p.crt";
     }
  
-The last step is certificates generation. Run the following:
+最后一步是生成证书。运行以下命令：
 
     openssl genrsa -out /etc/prosody/certs/xxx.b32.i2p.key 2048
     openssl req -new -x509 -key /etc/prosody/certs/xxx.b32.i2p.key -out /etc/prosody/certs/xxx.b32.i2p.crt -days 3650
     chown root:prosody /etc/prosody/certs/*.b32.i2p.{key,crt}
     chmod 640 /etc/prosody/certs/*.b32.i2p.{key,crt}
 
-Restart prosody to apply new settings.
+重启 prosody 以应用新设置。
 
-## Creating accounts and connecting clients
+## 创建账户与连接客户端
 
-To add admin account, run in your terminal:
+要添加管理员账户，在终端运行：
 
     sudo prosodyctl adduser admin@xxx.b32.i2p
 
-Now configure your XMPP client (for example, [Pidgin](https://pidgin.im)). 
+现在配置你的 XMPP 客户端（例如 [Pidgin](https://pidgin.im)）。
 
 ![img](media/xmpp-3.png)
 
-If you are connecting to a localhost, specify custom server address 127.0.0.1 port 5222.
+如果连接到本地主机，请指定自定义服务器地址 127.0.0.1，端口 5222。
 
 ![img](media/xmpp-4.png)
 
-If you are connecting to a server remotely via I2P, specify a Socks5 proxy server 127.0.0.1:4447. 
+如果通过 I2P 远程连接到服务器，请指定 Socks5 代理服务器 127.0.0.1:4447。
 
 ![img](media/xmpp-5.png)
 
-If everything is configured correctly, you will be able add other users of I2P federation to your contacts and chat with them. 
+如果一切配置正确，你将能够把 I2P 联邦的其他用户添加到联系人并与他们聊天。
 
-To test your setup, add `hello@xmppoeiqpbeelicgkoim3ibegjonbqwh7vv7d6nsju73tjjmujpq.b32.i2p` to your contacts and send it "hello".
+要测试你的设置，将 `hello@xmppoeiqpbeelicgkoim3ibegjonbqwh7vv7d6nsju73tjjmujpq.b32.i2p` 添加到联系人并发送 “hello”。
 
-## (Advanced) Clearnet-to-I2P federation
+##（高级）明网到 I2P 联邦
 
-It is also possible to configure your existing "clearnet" XMPP server to join I2P federation and chat with darknet users. For that, create a tunnel as described above. Each user that wishes to communicate with your server will have to add custom mapping to their prosody config file. That is how my server is configured to communicate with `i2p.rocks` server:
+你也可以将现有的“明网”XMPP 服务器配置为加入 I2P 联邦，与暗网用户进行聊天。为此，按上述方法创建一个隧道。每个希望与你的服务器通信的用户都需要在其 prosody 配置文件中添加自定义映射。以下是我的服务器与 `i2p.rocks` 通信的配置：
 
     darknet_map = {
         ["i2p.rocks"] = "ynkz7ebfkllljitiodcq52pa7fgqziomz4wa7tv4qiqldghpx4uq.b32.i2p";
         ["muc.i2p.rocks"] = "ynkz7ebfkllljitiodcq52pa7fgqziomz4wa7tv4qiqldghpx4uq.b32.i2p";
     }
  
-If you have any questions, you may ask them at our XMPP conference `federation@muc.i2p.rocks`. Happy chatting! 
+如有任何问题，你可以在我们的 XMPP 会议室 `federation@muc.i2p.rocks` 提问。聊得愉快！

@@ -1,16 +1,16 @@
-# Qt Desktop GUI app build instructions
+# Qt 桌面 GUI 应用构建说明
 
-## Build Requirements
+## 构建要求
 
 Qt 5
 
-## Under Windows
+## 在 Windows 下
 
-### Without Qt Creator
+### 不使用 Qt Creator
 
-All commands should be run under MSYS2 mingw32.
+所有命令应在 MSYS2 mingw32 下运行。
 
-(obsolete instructions, please do a PR if you have working instrucitons)
+（过时的说明，如果你有可用的说明请提 PR）
 
 ```bash
 pacman -S git make tar mingw-w64-i686-gcc mingw-w64-i686-boost mingw-w64-i686-libpng mingw-w64-i686-openssl mingw-w64-i686-zlib
@@ -28,15 +28,15 @@ qmake
 make USE_UPNP=yes
 ```
 
-#### Caveats
+#### 注意事项
 
-It is important to restrict PATH as described above. If you have Strawberry Perl and/or Mercurial installed, it will pick up gcc & openssl from the wrong places.
+按上述方式限制 PATH 很重要。如果你安装了 Strawberry Perl 和/或 Mercurial，它会从错误的位置拾取 gcc 和 openssl。
 
-If you are an Arch Linux user, refrain from updating system with `pacman -Syu`. Always update runtime separately as described on the home page, otherwise you might end up with DLLs incompatibility problems.
+如果你是 Arch Linux 用户，请避免使用 `pacman -Syu` 更新系统。始终按照主页所述单独更新运行时，否则你可能会遇到 DLL 不兼容问题。
 
-## Under Debian/Ubuntu
+## 在 Debian/Ubuntu 下
 
-### With Qt Creator
+### 使用 Qt Creator
 
 ```bash
 
@@ -55,10 +55,9 @@ cd git
 git clone --recursive https://github.com/PurpleI2P/i2pd-qt.git
 ```
 
-Then, open Qt Creator; open `git/i2pd-qt/i2pd_qt.pro`; set build make parameter
-`-jNUMBER-OF-CPU-CORES`, e.g. `-j7`. Then, finally, press Make button.
+然后，打开 Qt Creator；打开 `git/i2pd-qt/i2pd_qt.pro`；将构建的 make 参数设置为 `-jCPU-核心数`，例如 `-j7`。最后，点击 Make 按钮。
 
-### Without Qt Creator
+### 不使用 Qt Creator
 
 ```bash
 # Debian
@@ -77,21 +76,21 @@ git clone --recursive https://github.com/PurpleI2P/i2pd-qt.git
 cd i2pd-qt
 ```
 
-For release build,
+发布版构建，
 
 `qmake`
 
-For debug build,
+调试版构建，
 
 `qmake i2pd_qt.pro "CONFIG += debug"`
 
-And when `qmake` completed, run:
+当 `qmake` 完成后，运行：
 
 `make USE_UPNP=yes`
 
-## Under Kali
+## 在 Kali 下
 
-### Without Qt Creator
+### 不使用 Qt Creator
 
 ```bash
 sudo apt-get install build-essential g++ make libcrypto++-dev libssl-dev \
@@ -103,19 +102,19 @@ git clone --recursive https://github.com/PurpleI2P/i2pd-qt.git
 cd i2pd-qt
 ```
 
-For release build,
+发布版构建，
 
 `qmake`
 
-For debug build,
+调试版构建，
 
 `qmake i2pd_qt.pro "CONFIG += debug"`
 
-And when `qmake` completed, run:
+当 `qmake` 完成后，运行：
 
 `make USE_UPNP=yes`
 
-## Building a Flatpak package
+## 构建 Flatpak 包
 
 ```bash
 sudo apt install flatpak flatpak-builder
@@ -126,6 +125,6 @@ export FLATPAK_BUILDER_N_JOBS=4                            # build process jobs 
 flatpak-builder --user --install --force-clean i2pd_build_dir website.i2pd.i2pd.json
 ```
 
-## More details
+## 更多细节
 
-For more details on build procedures, see the GitHub actions at https://github.com/PurpleI2P/i2pd-qt/tree/master/.github/workflows .
+关于构建流程的更多细节，请参见 GitHub Actions：https://github.com/PurpleI2P/i2pd-qt/tree/master/.github/workflows 。

@@ -1,4 +1,4 @@
-BOB interface
+BOB 接口
 =============
 
-BOB interface is documented [here](https://geti2p.net/en/docs/api/bob)
+BOB 接口的文档在[此处](https://geti2p.net/zh/docs/api/bob)

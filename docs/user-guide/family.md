@@ -1,45 +1,45 @@
-Family configuration
+家族配置
 ====================
 
-You might want to specify a family your router belongs to.
-There are two ways to do this: create a new family or join to an existing one.
+你可能希望为你的路由器指定所属的家族。
+有两种方式可以做到这一点：创建一个新家族，或加入一个现有家族。
 
-New family
+新建家族
 -----------
 
-To create a new family, you must first create a family self-signed certificate and key.  
-The only key type supported is prime256v1.
-Use the following list of commands to do this through openssl:  
+要创建新的家族，必须先生成家族的自签名证书和密钥。  
+唯一支持的密钥类型是 prime256v1。
+使用以下 openssl 命令完成：  
 
     openssl ecparam -name prime256v1 -genkey -out <your family name>.key  
     openssl req -new -key <your family name>.key -out <your family name>.csr  
     touch v3.ext
     openssl x509 -req -days 3650 -in <your family name>.csr -signkey <your family name>.key -out <your family name>.crt -extfile v3.ext  
 
-Specify &lt;your family name>.family.i2p.net for the CN (Common Name) when requested.
+在提示时，将 CN（Common Name）填写为 &lt;your family name>.family.i2p.net。
 
-Once you are done generating it place &lt;your-family-name>.key and &lt;your-family-name>.crt in the <ip2d data>/family folder (for example ~/.i2pd/family).
-You should provide these two files to other members joining your family.
-If you want to register your family and let the I2P network recognize it, create a pull request for your .crt file into contrib/certificate/family.
-Certificates added into the public repository this way will appear in i2pd and I2P next releases packages. Don't place .key file, it must be shared between you family members only.
+生成完成后，将 &lt;your-family-name>.key 和 &lt;your-family-name>.crt 放到 &lt;ip2d data>/family 目录（例如 ~/.i2pd/family）。
+你应将这两个文件提供给加入你家族的其他成员。
+如果你想注册你的家族并让 I2P 网络识别它，请为你的 .crt 文件向 contrib/certificate/family 提交一个 Pull Request。
+以这种方式添加到公共仓库的证书将会出现在 i2pd 和 I2P 的后续发行包中。不要提交 .key 文件，它只能在你的家族成员之间共享。
 
-How to join existing family
+如何加入现有家族
 ---------------------------
 
-Once you and that family agree to do it, they must give you .key and .crt file and you must place in <i2pd datadir>/certificates/family/ folder.
+一旦你与该家族达成一致，他们必须把 .key 和 .crt 文件提供给你，你需要将其放到 <i2pd datadir>/certificates/family/ 目录中。
 
-Publish your family
+发布你的家族
 -------------------
 
-Run i2pd with the parameters 'family=&lt;your-family-name>', and make sure you have &lt;your-family-name>.key and &lt;your-family-name>.crt in your 'family' folder.
-If everything is set properly, you router.info will contain two new fields: 'family' and 'family.sig'.
-If not, your router will complain on startup with log messages starting with "Family:" prefix and severity 'warn' or 'error'.
+使用参数 'family=&lt;your-family-name>' 运行 i2pd，并确保在你的 'family' 目录中有 &lt;your-family-name>.key 和 &lt;your-family-name>.crt。
+如果一切设置正确，你的 router.info 将包含两个新字段：'family' 和 'family.sig'。
+否则，你的路由器在启动时会输出以 "Family:" 为前缀、严重级别为 'warn' 或 'error' 的日志提示。
     
-Export to Java-I2P from i2pd
+从 i2pd 导出到 Java-I2P
 ------------------
-1. **Convert private key file to PKCS#8**
+1. **将私钥文件转换为 PKCS#8**
     
-The private key is in an openssl "EC Parameter File" format:
+私钥当前为 openssl 的“EC 参数文件”格式：
 ```
 -----BEGIN EC PARAMETERS-----
 (base64)
@@ -48,45 +48,45 @@ The private key is in an openssl "EC Parameter File" format:
 (base64)
 -----END EC PRIVATE KEY-----
 ```
-It must be converted to PKCS#8 format first.
+必须先将其转换为 PKCS#8 格式。
 ```
 openssl pkcs8 -topk8 -nocrypt -in your-family-name.key -out your-family-name.pkcs8
 ```
-Now you have a pkcs8 private key in the your-family-name.pkcs8 file: 
+现在，你在 your-family-name.pkcs8 文件中拥有一个 PKCS#8 私钥： 
 ```
 -----BEGIN PRIVATE KEY-----
 (base64)
 -----END PRIVATE KEY-----
 ```
-2. **Combine PKCS#8 and certificate files**
+2. **合并 PKCS#8 和证书文件**
     
-Now combine the pkcs8 and certificate files into a single file: 
+现在将 pkcs8 和证书文件合并为一个文件： 
 ```
 cat your-family-name.pkcs8 your-family-name.crt > your-family-name.secret
 ```
-3. **Import combined file**
+3. **导入合并后的文件**
     
-Now go to Java i2p console http://127.0.0.1:7657/configfamily page and Join Existing Router Family selecting the file your-family-name.secret to join that family.
+现在访问 Java I2P 控制台 http://127.0.0.1:7657/configfamily 页面，在“Join Existing Router Family”处选择文件 your-family-name.secret 以加入该家族。
 
-([source](http://zzz.i2p/topics/3313))
+（[来源](http://zzz.i2p/topics/3313)）
 
-Export to i2pd from Java-I2P
+从 Java-I2P 导出到 i2pd
 ----------------------------
 
-Go to Java i2p console http://127.0.0.1:7657/configfamily page and export family key. You'll have a file `family-your-family-name-secret.crt`. It contains both the private key and the public key certificate.
+前往 Java I2P 控制台 http://127.0.0.1:7657/configfamily 页面并导出家族密钥。你将得到一个文件 `family-your-family-name-secret.crt`。它同时包含私钥和公钥证书。
 
-Copy it to `your-family-name.key` and `your-family-name.crt`.
+将其分别复制为 `your-family-name.key` 和 `your-family-name.crt`。
     
-Edit `your-family-name.key` in a text editor to remove the certificate part so it contains only the private key part.
+用文本编辑器编辑 `your-family-name.key`，删除证书部分，使其只包含私钥部分。
     
-Edit `your-family-name.crt` in a text editor to remove the private key part so it contains only the certificate part.
+用文本编辑器编辑 `your-family-name.crt`，删除私钥部分，使其只包含证书部分。
 
-Move the `your-family-name.key` and `your-family-name.crt` files to the i2pd /certificates/family/ folder, as instructed [here](https://i2pd.readthedocs.io/en/latest/user-guide/family/).
+按照[此处](https://i2pd.readthedocs.io/en/latest/user-guide/family/)的说明，将 `your-family-name.key` 和 `your-family-name.crt` 文件移动到 i2pd 的 /certificates/family/ 目录。 
     
-This assumes that i2pd/openssl can handle the PKCS#8 format for the private key. 
+这假定 i2pd/openssl 能处理 PKCS#8 格式的私钥。 
 
-([source](http://zzz.i2p/topics/3313))
+（[来源](http://zzz.i2p/topics/3313)）
 
 ------------------------
 
-TODO: List common errors
+待办：列出常见错误
