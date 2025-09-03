@@ -13,3 +13,4 @@
 感谢以下用户的贡献：
 
 - orwas.i2p
+- niceboat.i2p
