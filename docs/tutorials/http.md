@@ -5,7 +5,9 @@
 
 要在隐形互联网中浏览匿名网站，请将你的网页浏览器配置为使用 HTTP 代理 127.0.0.1:4444（i2pd 默认提供）。
 
-在 Firefox 中：Preferences -> Advanced -> Network 标签 -> Connection Settings -> 选择 Manual proxy configuration，输入 HTTP 代理 127.0.0.1，端口 4444
+在 Firefox 中：Settings -> General -> Network 标签 -> Configure Proxy Access to the Internet -> 选择 Manual proxy configuration，输入 HTTP 代理 127.0.0.1，端口 4444
+
+![img](media/http-1.png)
 
 在 Chromium 中：使用参数运行可执行文件
 
