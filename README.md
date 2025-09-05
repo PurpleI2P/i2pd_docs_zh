@@ -1,6 +1,6 @@
 # i2pd 文档（中文版）
 
-此文档基于 https://github.com/PurpleI2P/i2pd_docs_en/commit/6759e137712b7c78dbf6dfbf864227fadb346db1 的中文版本。
+此文档已经同步英文版本至 https://github.com/PurpleI2P/i2pd_docs_en/commit/9bc1eb539ed6bf4cdd42086ef35e60969c7f2c3b
 
 ## 提交方式
 
