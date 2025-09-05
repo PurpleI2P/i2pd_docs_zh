@@ -6,45 +6,45 @@ site_author: PurpleI2P Team
 repo_url: https://github.com/PurpleI2P/i2pd_docs_en
 
 nav:
-- Home: index.md
-- User Guide:
-    - Installing: user-guide/install.md
-    - Running: user-guide/run.md
-    - Configuring: user-guide/configuration.md
-    - I2P tunnels configuration: user-guide/tunnels.md
-    - Family configuration: user-guide/family.md
-    - FAQ: user-guide/FAQ.md
-- How-To / Tutorials:
-    - Anonymous websites: tutorials/http.md
-    - Anonymous IRC chats: tutorials/irc.md
-    - Decentralized instant messenger (XMPP aka Jabber): tutorials/xmpp.md
-    - Filesharing: tutorials/filesharing.md
-    - Using RetroShare with i2pd: tutorials/retroshare.md
-    - Bootstrapping without Reseed Servers: tutorials/floodfill-bootstrap.md
-    - Yggdrasil only router configuration: tutorials/yggdrasil-only-mode.md
-- Developer Section:
-    - Building from source:
-        - Requirements: devs/building/requirements.md
+- 主页: index.md
+- 用户指南:
+    - 安装: user-guide/install.md
+    - 运行: user-guide/run.md
+    - 配置: user-guide/configuration.md
+    - I2P 隧道配置: user-guide/tunnels.md
+    - 家族配置: user-guide/family.md
+    - 问与答: user-guide/FAQ.md
+- 操作方法/教程:
+    - 匿名网站: tutorials/http.md
+    - 匿名 IRC 聊天: tutorials/irc.md
+    - 去中心化即时通讯 (XMPP, 又称之为 Jabber): tutorials/xmpp.md
+    - 文件共享: tutorials/filesharing.md
+    - 使用 RetroShare 搭配 i2pd: tutorials/retroshare.md
+    - 无需 Reseed 服务器的引导: tutorials/floodfill-bootstrap.md
+    - 仅通过 Yggdrasil 的路由器配置: tutorials/yggdrasil-only-mode.md
+- 开发者部分:
+    - 从源代码构建:
+        - 构建要求: devs/building/requirements.md
         - Unix: devs/building/unix.md
         - Windows: devs/building/windows.md
         - Android: devs/building/android.md
-        - Cross-platform: devs/building/cross.md
+        - 交叉编译: devs/building/cross.md
         - iOS: devs/building/ios.md
-        - GUI application: devs/building/qt-desktop-gui.md
+        - GUI 应用: devs/building/qt-desktop-gui.md
     - API:
-        - Choosing API for your project: devs/api/index.md
+        - 为你的项目选择 API: devs/api/index.md
         - SAM: devs/api/SAM.md
         - BOB: devs/api/BOB.md
         - I2CP: devs/api/I2CP.md
         - I2PControl: devs/api/I2PControl.md
         - libi2pd: devs/api/libi2pd.md
-    - i2pd-specific changes to I2P protocols: devs/i2pd-specifics.md
-    - Hacking the code: devs/hacking.md
-- About:
-    - Community: about/community.md
-    - History: about/history.md
-    - License: about/license.md
-    - Contributing: about/contributing.md
+    - i2pd 对 I2P 协议的特定更改: devs/i2pd-specifics.md
+    - 开发 i2pd: devs/hacking.md
+- 关于:
+    - 社区: about/community.md
+    - 历史: about/history.md
+    - 许可证: about/license.md
+    - 贡献: about/contributing.md
 
 copyright: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a>, Maintained by the PurpleI2P team
 theme: readthedocs
