@@ -47,7 +47,7 @@ ED25519-SHA512                       | 7    | 默认
 GOSTR3410-A-GOSTR3411-256            | 9    | 与 Java 路由器不兼容
 GOSTR3410-TC26-A-GOSTR3411-512       | 10   | 与 Java 路由器不兼容
 RED25519-SHA512                      | 11   | 用于密钥盲化（加密 LeaseSet）
-ML-DSA-44                            | 12   | 后量子
+ML-DSA-44                            | 12   | 后量子。需要 OpenSSL 版本号大于或等于 3.5.0
 
 LeaseSet
 ------------
@@ -67,11 +67,14 @@ META        | 7    | 未实现
 
 Type                                 | Code | Comment
 ------------------------------------ | ---- | -----------
-ELGAMAL                              | 0    | 默认（仅用于兼容旧路由器）
+ELGAMAL                              | 0    | 遗留
 ECIES_P256_SHA256_AES256CBC          | 1    | 与 Java 路由器不兼容
 *ECIES_P384_SHA384_AES256CBC*        | 2    | 未实现
 *ECIES_P521_SHA512_AES256CBC*        | 3    | 未实现
-ECIES_X25519_AEAD                    | 4    | 默认
+ECIES_X25519_AEAD                    | 4    | **默认**
+ECIES_MLKEM512_X25519_AEAD           | 5    | 后量子。需要 OpenSSL 版本号大于或等于 3.5.0
+ECIES_MLKEM768_X25519_AEAD           | 6    | **默认**。后量子。需要 OpenSSL 版本号大于或等于 3.5.0
+ECIES_MLKEM1024_X25519_AEAD          | 7    | 后量子。需要 OpenSSL 版本号大于或等于 3.5.0
 
 客户端隧道
 --------------
