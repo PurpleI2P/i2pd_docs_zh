@@ -118,6 +118,15 @@ i2pd [在 Gentoo 主仓库中有可用的 ebuild](https://packages.gentoo.org/pa
     sudo apt-get update
     sudo apt-get install i2pd
 
+### Void
+
+你可以通过使用 /current [xpbs 仓库](https://github.com/void-linux/void-packages/tree/master/srcpkgs/i2pd) 安装 i2pd。
+
+若要安装并设定守护进程，请执行下列步骤：
+
+    sudo xbps-install -Sy i2pd
+    sudo ln -s /etc/sv/i2pd /var/service
+
 ## FreeBSD
 
 你可以通过[ports](https://www.freshports.org/security/i2pd/)安装 i2pd。
