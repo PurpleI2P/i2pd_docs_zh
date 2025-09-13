@@ -12,7 +12,7 @@ I2P 让世界各地的人们可以不受限制地交流和分享信息。
 
 虽然 [Java I2P](https://geti2p.net) 和 i2pd 都是 I2P 网络的客户端，但 i2pd 有一些重要的差异和优势：
 
-* Java I2P 内置了用于种子、电子邮件等的应用；i2pd 只是一个路由器，你可以通过 I2CP 接口将其与其他软件配合使用。
+* Java I2P 内置了用于种子下载、电子邮件等的应用；i2pd 只是一个路由器，你可以通过 I2CP 接口将其与其他软件配合使用。
 * i2pd 不需要 Java。它使用 C++ 编写。
 * i2pd 占用更少的内存和 CPU。
 * 只要有 gcc 或 clang 的地方都可以编译 i2pd（包括树莓派和路由器）。
@@ -30,11 +30,11 @@ I2P 让世界各地的人们可以不受限制地交流和分享信息。
 
     ulimit -n
 
-普通 i2pd 节点的合适值为 4096，floodfill 节点为 8192。像这样在运行 i2pd 前设置：
+对于一般的 i2pd 节点而言，合适的值为 4096，对 floodfill 节点为 8192。在你运行 i2pd 前，可以像这样进行设置：
 
     ulimit -n 4096 && ./i2pd
 
-如果还不行，你可能发现了一个缺陷。请通过 IRC 联系开发者或在 GitHub 上提交 issue。
+如果依旧不行，你可能发现了一个 bug。请通过 IRC 联系开发者或在 GitHub 上提交 issue。
 
 ## 隧道创建成功率达到多少算好？
 
@@ -42,25 +42,25 @@ I2P 让世界各地的人们可以不受限制地交流和分享信息。
 
 ## 有地方可以查找正在运行的 I2P 网站吗？
 
-当然，可以在[这里](http://identiguy.i2p.xyz/)找到列表。
+当然，[这里](http://identiguy.i2p.xyz/)有一份列表。
 
 ## 我如何让我的路由器更好地融入网络？
 
-调整设置：设定正确的带宽和分享比例。
+调整设置：设定正确的带宽和带宽分享比例。
 
 长时间运行 i2pd，下载并做种一些热门种子。
 
 ## 我应该用什么浏览器访问 I2P 网站？
 
-使用任何开源浏览器，例如 Firefox 或基于 Chromium 的替代品。为 I2P 创建一个单独的配置文件（[Firefox 指南](https://support.mozilla.org/en-US/kb/profile-manager-create-and-remove-firefox-profiles)），尽量不要将明网浏览与 I2P 混用。学习如何配置浏览器以获得更好的隐私和安全性。
+使用任何开源浏览器，例如 Firefox 或基于 Chromium 的其他浏览器。为 I2P 创建一个单独的配置文件（[Firefox 指南](https://support.mozilla.org/en-US/kb/profile-manager-create-and-remove-firefox-profiles)），并且尽量不要将明网浏览与 I2P 活动混在一起。学习如何配置浏览器以获得更好的隐私和安全性。
 
-同时为 I2P/onion/明网浏览配置 [privoxy](https://wiki.archlinux.org/index.php/Privoxy) 是个好主意。
+若想同时浏览 I2P/onion/明网，配置 [privoxy](https://wiki.archlinux.org/index.php/Privoxy) 是个好主意。
 
-i2pd 的 SOCKS 代理有一个选项，可以将所有非 I2P 流量转发到 Tor 的 SOCKS 代理。使用该功能时务必清楚自己在做什么！
+i2pd 的 SOCKS 代理有一个选项，可以将所有非 I2P 流量转发到 Tor 的 SOCKS 代理。使用该功能时请务必想清楚自己在做什么！
 
 ## 什么是 floodfill 模式？
 
-Floodfill 模式会把你的路由器变成一个 floodfill，这意味着其他路由器会在你的路由器上发布和获取 LeaseSet 和 RI。[了解更多](http://geti2p.net/en/docs/how/network-database)。
+Floodfill 模式会把你的路由器变成一个洪泛节点，这意味着其他路由器会在你的路由器上发布和获取 LeaseSet（租约集） 和 RI（RouterInfo 路由器信息）。[了解更多](http://geti2p.net/en/docs/how/network-database)。
 
 Floodfill 模式需要更多带宽和 CPU 时间。只有当你的节点具有公共 IPv4 地址并满足最低带宽要求时，才应启用 floodfill。选项：`floodfill = true`
 
@@ -68,12 +68,12 @@ Floodfill 模式需要更多带宽和 CPU 时间。只有当你的节点具有�
 
 I2P 和 Tor 有一些相似之处，但它们是完全不同的技术。
 
-Tor 旨在作为常规互联网的匿名代理，而 I2P 专门用于构建用于隐藏服务和 P2P 应用的虚拟匿名网络。
+Tor 旨在作为常规互联网的匿名代理，而 I2P 是一个虚拟匿名网络，专门设计用来构建隐藏服务和 P2P 应用。
 
-Tor 项目由美国军方发起，并从政府获得大部分资金；而 I2P 则由独立的民间社区发起。
+Tor 项目由美国军方发起，并从政府获得大部分资金；而 I2P 则由独立的民间社区创建。
 
 Tor 在设计上高度集中化，而 I2P 的设计是去中心化且分布式的。
 
 ## 可以把 i2pd 用作常规互联网的代理吗？
 
-可以，但最好为此使用 [Tor](https://www.torproject.org/)。
+可以，但 [Tor](https://www.torproject.org/) 是更好的选择。
