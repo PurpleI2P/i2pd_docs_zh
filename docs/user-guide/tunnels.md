@@ -4,36 +4,36 @@ I2P 隧道配置
 概述
 --------
 
-`tunnels.conf` 旨在支持多个 I2P 隧道。配置文件在类 Unix 系统上必须位于 `~/.i2pd`（按用户）或 `/var/lib/i2pd`（系统范围），在 Windows 上必须位于 `%APPDATA%/i2pd`（按用户）。
+`tunnels.conf` 用于支持多个 I2P 隧道。配置文件在类 Unix 系统上必须位于 `~/.i2pd`（分用户）或 `/var/lib/i2pd`（全系统），在 Windows 上必须位于 `%APPDATA%/i2pd`（分用户）。
 
-该文件使用 .ini 文件格式。它由多个具有唯一名称的节组成。
+该文件使用 .ini 文件格式。它由多个具有唯一名称的配置节（section）组成。
 
 隧道类型
 ------------
 
-节的类型由参数 type 指定。
+配置节的类型由参数 type 指定。
 
 可用的隧道类型：
 
-Type          | Description
+类型          | 说明
 ------------- | --------------------------------------
-client        | 到远程 I2P 目标的客户端隧道（TCP）
+client        | 到远程 I2P 目标（destination）的客户端隧道（TCP）
 server        | 在 I2P 网络中设置任意 TCP 服务的通用服务器隧道
 http          | 在 I2P 中设置网站的 HTTP 服务器隧道
 irc           | 在 I2P 中设置 IRC 服务器的 IRC 服务器隧道
 udpclient     | 将本地 UDP 端点转发到远程 I2P 目标
 udpserver     | 将来自 N 个 I2P 目标的流量转发到本地 UDP 端点
-socks         | 用于使用 I2P 的自定义 Socks 代理服务
-httpproxy     | 用于使用 I2P 的自定义 HTTP 代理服务
+socks         | 用于 I2P 的自定义 Socks 代理服务
+httpproxy     | 用于 I2P 的自定义 HTTP 代理服务
 
 签名类型
 ------------
 
-在隧道配置中使用参数 `signaturetype = <code>`。
+在隧道配置中使用参数 `signaturetype = <编号>`。
 
 可用的签名类型：
 
-Type                                 | Code | Comment
+类型                                 | 编号 | 说明
 ------------------------------------ | ---- | -----------
 DSA-SHA1                             | 0    | 已弃用
 ECDSA-P256                           | 1    | 无（正在使用）
@@ -49,12 +49,12 @@ GOSTR3410-TC26-A-GOSTR3411-512       | 10   | 与 Java 路由器不兼容
 RED25519-SHA512                      | 11   | 用于密钥盲化（加密 LeaseSet）
 ML-DSA-44                            | 12   | 后量子。需要 OpenSSL 版本号大于或等于 3.5.0
 
-LeaseSet
+LeaseSet（租约集）
 ------------
 
-可用的 LeaseSet 类型（在隧道配置中参数 `i2cp.leaseSetType = <code>`）：
+可用的 LeaseSet 类型（在隧道配置中参数 `i2cp.leaseSetType = <编号>`）：
 
-Type        | Code | Comment
+类型        | 编号 | 说明
 ----------- | ---- | -----------
 OLD         | 1    | 已弃用
 STANDARD    | 3    | 默认
@@ -63,9 +63,9 @@ META        | 7    | 未实现
 
 0、2、4、6 类型保留给路由器（RouterInfo 类型）。
 
-可用的 LeaseSet 加密类型（在隧道配置中参数 `i2cp.leaseSetEncType = <code>`）：
+可用的 LeaseSet 加密类型（在隧道配置中参数 `i2cp.leaseSetEncType = <编号>`）：
 
-Type                                 | Code | Comment
+类型                                 | 编号 | 说明
 ------------------------------------ | ---- | -----------
 ELGAMAL                              | 0    | 遗留
 ECIES_P256_SHA256_AES256CBC          | 1    | 与 Java 路由器不兼容
@@ -79,9 +79,9 @@ ECIES_MLKEM1024_X25519_AEAD          | 7    | 后量子。需要 OpenSSL 版本�
 客户端隧道
 --------------
 
-助记：我们可以以客户端身份连接到某人
+一句话简介：我们可以以客户端身份连接到某人
 
-每个客户端隧道必须包含一些必需参数，以及一些可选参数。
+每个客户端隧道包含一些必需参数，还有一些可选参数。
 
 以下是一个客户端隧道的示例：
 
@@ -101,14 +101,14 @@ keys = irc.dat
 
 可选参数：
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 address             | 隧道绑定的本地接口，“127.0.0.1”表示仅允许来自本地主机的连接，“0.0.0.0”表示允许来自任何地方的连接。（默认：127.0.0.1）
 port                | 客户端隧道的端口。
 signaturetype       | 新密钥的签名类型。RSA 签名（4、5、6）不被允许，将会被改为 7。（默认：7）
 cryptotype          | 新密钥的加密类型。实验性。应始终为 0
-destinationport     | 连接到目标上的特定端口。默认 0（指向目标端服务器侧的第一个隧道）
-keepaliveinterval   | 以秒为单位，在此间隔后向目标发送 ping。（默认：0 - 不发送 ping）
+destinationport     | 连接到目标上的特定端口。默认 0（指向目标服务器侧的第一个隧道）
+keepaliveinterval   | 在此间隔后向目标发送 ping，以秒为单位。（默认：0 - 不发送 ping）
 keys                | 目标的密钥。当多个隧道相同，则每个隧道都会使用相同的目标。
 
 因此，基于上述示例，如果你在本地主机上连接到 127.0.0.1:6668，i2pd 会将该连接通过隧道转发到 irc.ilita.i2p。
@@ -116,7 +116,7 @@ keys                | 目标的密钥。当多个隧道相同，则每个隧道�
 服务器/通用隧道
 ----------------------
 
-助记：我们在网络中向他人提供某项服务
+一句话简介：我们在网络中向他人提供某项服务
 
 以下是一个服务器隧道的示例：
 
@@ -139,7 +139,7 @@ port 是（非 I2P）IP 主机上 TCP 监听端口，本地目标监听后会连
 
 可选参数：
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 host                | 服务器的 IP 地址（i2pd 会将来自 I2P 的数据发送到此地址）
 port                | 服务器隧道的端口。
@@ -148,14 +148,14 @@ accesslist          | 允许连接的以逗号分隔的 b32 地址列表（不�
 gzip                | 若设为 false 则关闭内部压缩。（默认：false）
 signaturetype       | 新密钥的签名类型。（默认：7）
 cryptotype          | 新密钥的加密类型。实验性。应始终为 0
-enableuniquelocal   | 若为 true，连接到本地地址将显示为 127.x.x.x，其中 x.x.x 为传入连接对端 ident hash 的前 3 个字节。（默认：IPv4 为 true，IPv6 为 false）
+enableuniquelocal   | 若为 true，连接方地址将显示为 127.x.x.x，其中 x.x.x 为传入连接对端身份哈希的前 3 字节。（默认：IPv4 为 true，IPv6 为 false）
 address             | 隧道连接到 host 时所使用的本地接口 IP 地址。通常不使用
 keys                | 目标的密钥。当多个隧道相同，则每个隧道都会使用相同的目标。
 
 服务器/HTTP 隧道
 -------------------
 
-http 隧道的配置与常规服务器隧道相同，但必须将 'Host:' 字段设置为配置中提供的地址。必要时 i2pd 也会解析它。
+http 隧道的配置与常规服务器隧道相同，但必须将 'Host:' 字段设置为配置中提供的地址。在必要时 i2pd 也会对其进行解析。
 
 以下是一个 http 隧道的示例：
 
@@ -169,7 +169,7 @@ keys = our-website.dat
 
 可选参数：
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 hostoverride        | 在 'Host:' 头中发送的值，默认：与 host 参数相同
 ssl                 | 对上游服务器使用 SSL 连接。可使用 `hostoverride` 参数设置 SNI 域。默认：false（自 2.44.0 起）
@@ -181,7 +181,7 @@ IRC 隧道应通过 WEBIRC 连接到 IRC 服务器。它将 IP 地址（通常�
 
 可选参数：
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 webircpassword      | 与 WEBIRC 命令一起发送的密码
 
@@ -199,7 +199,7 @@ destination = something.b32.i2p
 port = 1194
 ```
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 destination         | udpserver 隧道的 I2P 目标，必需参数
 address             | 绑定本地 UDP 端点的 IP 地址（默认：`127.0.0.1`）
@@ -217,7 +217,7 @@ host = 127.0.0.1
 port = 1194
 ```
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 address             | 用于本地 UDP 端点的 IP 地址（默认：`127.0.0.1`）
 host                | 要转发流量到的 IP 地址，必需参数
@@ -240,7 +240,7 @@ port = 14447
 keys = socks-keys.dat 
 ```
 
-Option              | Description
+选项              | 说明
 --------------------|--------------------
 address             | Socks 代理绑定的本地地址（默认：`127.0.0.1`）
 port                | Socks 代理绑定的 TCP 端口
@@ -271,9 +271,9 @@ i2p.streaming.maxWindowSize   | 流的最大窗口大小（默认：512）
 i2p.streaming.dontSign        | 在需要时不包含签名。仅当对端不验证签名时才启用（默认：false）
 i2cp.leaseSetType             | 要发送的 LeaseSet 类型。1、3 或 5。（默认：3）
 i2cp.leaseSetEncType          | 用于 LeaseSet 类型 3 或 5 的加密类型（逗号分隔）。（默认：0,4）
-i2cp.leaseSetPrivKey          | 加密 LeaseSet 的解密密钥，base64。PSK 或私有 DH
+i2cp.leaseSetPrivKey          | 加密 LeaseSet 的解密密钥，base64。PSK（预共享密钥） 或 DH 私钥
 i2cp.leaseSetAuthType         | 加密 LeaseSet 的认证类型。0 - 无认证（默认），1 - DH，2 - PSK
-i2cp.leaseSetClient.dh.nnn    | 客户端名:客户端的公有 DH（base64），用于认证类型 1，nnn 为整数
+i2cp.leaseSetClient.dh.nnn    | 客户端名:客户端的 DH 公钥（base64），用于认证类型 1，nnn 为整数
 i2cp.leaseSetClient.psk.nnn   | 客户端名:客户端的 PSK（base64），用于认证类型 2，nnn 为整数
 i2cp.dontPublishLeaseSet      | 若设为 true 则不发布 LeaseSet。（默认：false）
 
