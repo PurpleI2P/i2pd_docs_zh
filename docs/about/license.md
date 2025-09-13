@@ -1,5 +1,5 @@
-License
+授权
 =======
 
-This project is licensed under the BSD 3-clause license, which can be found in
-the file LICENSE in the root of the project source code.
+本项目以 BSD 3-clause 许可证授权, 
+许可证内容可在项目源码根目录下的 LICENSE 文件中查阅。
