@@ -97,7 +97,7 @@
 
 要测试你的设置，将 `hello@xmppoeiqpbeelicgkoim3ibegjonbqwh7vv7d6nsju73tjjmujpq.b32.i2p` 添加到联系人并发送 “hello”。
 
-##（高级）明网到 I2P 联邦
+##（高级）明网与 I2P 联邦
 
 你也可以将现有的“明网”XMPP 服务器配置为加入 I2P 联邦，与暗网用户进行聊天。为此，按上述方法创建一个隧道。每个希望与你的服务器通信的用户都需要在其 prosody 配置文件中添加自定义映射。以下是我的服务器与 `i2p.rocks` 通信的配置：
 
@@ -106,4 +106,4 @@
         ["muc.i2p.rocks"] = "ynkz7ebfkllljitiodcq52pa7fgqziomz4wa7tv4qiqldghpx4uq.b32.i2p";
     }
  
-如有任何问题，你可以在我们的 XMPP 会议室 `federation@muc.i2p.rocks` 提问。聊得愉快！
+如有任何问题，你可以在我们的 XMPP 聊天室 `federation@muc.i2p.rocks` 提问。聊得愉快！

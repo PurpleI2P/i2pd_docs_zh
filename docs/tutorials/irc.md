@@ -37,7 +37,7 @@ port = 5555
 keys = chatserver-key.dat
 ```
 
-   就这些。
+   搞定。
 
    或者，如果你的 IRC 服务器支持 WebIRC，例如 UnreadIRCd，在 UnrealIRCd 配置中加入：
 
@@ -72,7 +72,7 @@ webirc {
    这有两个问题：
    
    第一，你将无法区分来自 I2P 的流量与其他本地主机流量。
-   第二，所有 I2P 用户都将无法被封禁，因为 127.0.0.1 被排除在所有封禁之外，包括 glines。
+   第二，所有 I2P 用户都将无法被封禁，因为 127.0.0.1 被排除在所有封禁之外，包括 glines（global line，全局封禁）。
 
    因此，我们可以伪造主机以将本地主机流量与 i2pd 流量分离。
 
@@ -85,7 +85,7 @@ webirc {
 ```
    注意：这里假设你的 IRCd 用户名为 unrealircd。如果不是，请在上面的 chown 命令中将 unrealircd:unrealircd 改为实际的用户与组。
 
-   如果你在 Debian/Ubuntu 上并安装了 AppArmor（很可能是的！），请运行接下来的命令。如果不执行这些步骤，那么后续一切可能会莫名其妙地失败。
+   如果你在 Debian/Ubuntu 上并安装了 AppArmor（很有可能！），请运行接下来的命令。如果不执行这些步骤，那么后续一切可能会莫名其妙地失败。
 
    仍以 root 身份运行：
 ```
@@ -122,6 +122,6 @@ webirc {
 
 5) 查找你的匿名 IRC 服务器的 b32 目标地址。
 
-   进入 web 控制台 -> [I2P 隧道页面](http://127.0.0.1:7070/?page=i2p_tunnels)。查看 Sever tunnels，你会在 anon-chatserver 旁看到类似 \<long random string\>.b32.i2p 的地址。
+   进入 web 控制台 -> [I2P 隧道页面](http://127.0.0.1:7070/?page=i2p_tunnels)。查看 Sever tunnels，你会在 anon-chatserver 旁看到类似 \<很长一串字母\>.b32.i2p 的地址。
 
    客户端将使用该地址匿名连接到你的服务器。
