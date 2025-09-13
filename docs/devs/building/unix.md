@@ -1,7 +1,7 @@
 在 Unix 系统上构建
 =============================
 
-本文档涵盖：
+本文档试图涵盖：
 
 * [Debian/Ubuntu](#debian-ubuntu)（包含打包说明）
 * [Fedora/Centos](#fedora-centos)
@@ -23,7 +23,7 @@
 	cmake <cmake options> . # 参见下面“CMake 选项”部分
 	make                    # 你可以在命令行添加 VERBOSE=1 以便调试
 
-……或者使用仅 make 的快捷方式：
+……或者简单粗暴地直接运行 make：：
 
 	cd i2pd/
 	make
@@ -49,7 +49,7 @@ CMake 选项
 * `WITH_UPNP`        启用 UPnP 支持（需要 libminiupnp，默认：OFF）
 * `WITH_AESNI`       启用 AES-NI 支持（默认：ON）
 * `WITH_HARDENING`   启用加固特性（仅 gcc，默认：OFF）
-* `WITH_MESHNET`     为 cjdns 测试网络构建（使应用无法用于主网，默认：OFF）
+* `WITH_MESHNET`     为 cjdns 测试网络构建（这会让应用无法用于主网，默认：OFF）
 * `WITH_ADDRSANITIZER`   启用 Address Sanitizer（默认：OFF）
 * `WITH_THREADSANITIZER` 启用 Thread Sanitizer（默认：OFF）
 

@@ -1,4 +1,4 @@
-# Qt 桌面 GUI 应用构建说明
+# Qt 桌面图形界面应用构建说明
 
 ## 构建要求
 
@@ -32,7 +32,7 @@ make USE_UPNP=yes
 
 按上述方式限制 PATH 很重要。如果你安装了 Strawberry Perl 和/或 Mercurial，它会从错误的位置拾取 gcc 和 openssl。
 
-如果你是 Arch Linux 用户，请避免使用 `pacman -Syu` 更新系统。始终按照主页所述单独更新运行时，否则你可能会遇到 DLL 不兼容问题。
+如果你是 Arch Linux 用户，请避免对 msys2 使用 `pacman -Syu` 更新系统。始终按照主页所述单独更新运行时，否则你可能会遇到 DLL 不兼容问题。
 
 ## 在 Debian/Ubuntu 下
 

@@ -1,9 +1,9 @@
 在 Android 上构建
 ===================
 
-### 注意：构建仅在 Linux 系统上可用。当前文档展示如何在 Ubuntu 18.04 上构建应用
+### 注意：构建仅在 Linux 系统上工作。当前文档展示如何在 Ubuntu 18.04 上构建应用
 
-先决条件
+准备工作
 --------------
 
 你需要安装用于构建库所需的 `rename`、`OpenJDK` 11+、`gradle` 5.1+ 以及 `Android SDK`。
@@ -12,7 +12,7 @@
 sudo apt-get install g++ rename openjdk-11-jdk gradle
 ```
 
-- Android [SDK](https://developer.android.com/studio#downloads)（仅选择命令行工具）
+- Android [SDK](https://developer.android.com/studio#downloads)（仅需选择命令行工具）
 - 如果系统提供的 gradle 版本低于 5.1，请从 [Gradle](https://gradle.org/install/) 主页下载
 
 依赖
@@ -64,7 +64,7 @@ popd
 
 ### 创建发布版 .apk
 
-要创建发布版 .apk，你必须获得一个 Java keystore 文件（.jks）。你可以已拥有，或使用 keytool 自行生成，或基于你已有的某个知名证书生成。
+要创建发布版 .apk，你必须获得一个 Java keystore 文件（.jks）。你可以使用已有的，或使用 keytool 自行生成，或基于你已有的某个知名证书生成。
 例如，i2pd 的发布版是用这个[证书](https://raw.githubusercontent.com/PurpleI2P/i2pd/9000b3df4edcbe7f2c8afd0e1e30609746311ace/contrib/certificates/router/orignal_at_mail.i2p.crt)签名的。
 
 修改文件 `app\build.gradle`，用你自己的值替换预设值

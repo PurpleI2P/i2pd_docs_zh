@@ -33,10 +33,10 @@ msys2
 按上面所述限制 PATH 非常重要。
 如果你安装了 Strawberry Perl 和/或 Mercurial，可能会从错误的位置拾取 gcc 和 openssl。
 
-如果你使用预编译头来加快编译（推荐），一旦编译选项因各种原因发生变化，可能会导致问题。
+如果你使用预编译头文件来加快编译（推荐），一旦编译选项因各种原因发生变化，可能会导致问题。
 只需删除构建文件夹中的 `stdafx.h.gch`（注意扩展名）即可。
 
-如果你是 Arch Linux 用户，请避免使用 `pacman -Syu` 更新系统。
+如果你是 Arch Linux 用户，请避免对 msys2 使用 `pacman -Syu` 更新系统。
 请始终按主页说明单独更新 runtime，否则可能遇到 DLL 兼容性问题。
 
 ### AES-NI
