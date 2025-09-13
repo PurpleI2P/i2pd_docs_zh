@@ -1,8 +1,8 @@
-i2pd 对 I2P 协议的特定更改
+i2pd 对 I2P 协议的独有更改
 ======================================
 
 # SAM
-SESSION CREATE 和 DEST GENERATE 支持额外参数 `CRYPTO_TYPE`，用于为新的本地目的地指定加密类型  
+SESSION CREATE 和 DEST GENERATE 支持额外参数 `CRYPTO_TYPE`，用于为新的本地目的地（destination）指定加密类型  
 
 `SIGNATURE_TYPE` 的新值：
 - `GOST_GOSTR3411256_GOSTR3410CRYPTOPROA` 或 `9`
