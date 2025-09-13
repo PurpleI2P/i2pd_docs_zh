@@ -9,19 +9,21 @@
 
 要创建新的家族，必须先生成家族的自签名证书和密钥。  
 唯一支持的密钥类型是 prime256v1。
-使用以下 openssl 命令完成：  
+可使用以下 openssl 命令生成：  
 
     openssl ecparam -name prime256v1 -genkey -out <your family name>.key  
     openssl req -new -key <your family name>.key -out <your family name>.csr  
     touch v3.ext
     openssl x509 -req -days 3650 -in <your family name>.csr -signkey <your family name>.key -out <your family name>.crt -extfile v3.ext  
 
-在提示时，将 CN（Common Name）填写为 &lt;your family name>.family.i2p.net。
+（your family name 为你的家族名称）
+
+在软件提示时，将 CN（Common Name）填写为 &lt;your family name>.family.i2p.net。
 
 生成完成后，将 &lt;your-family-name>.key 和 &lt;your-family-name>.crt 放到 &lt;ip2d data>/family 目录（例如 ~/.i2pd/family）。
 你应将这两个文件提供给加入你家族的其他成员。
-如果你想注册你的家族并让 I2P 网络识别它，请为你的 .crt 文件向 contrib/certificate/family 提交一个 Pull Request。
-以这种方式添加到公共仓库的证书将会出现在 i2pd 和 I2P 的后续发行包中。不要提交 .key 文件，它只能在你的家族成员之间共享。
+如果你想注册你的家族并让 I2P 网络认识它，请把你的 .crt 文件向 contrib/certificate/family 提交一个 Pull Request。
+以这种方式添加到公共仓库的证书将会出现在 i2pd 和 I2P 的后续发行软件包中。不要提交 .key 文件，它只应在你的家族成员之间共享。
 
 如何加入现有家族
 ---------------------------
@@ -39,7 +41,7 @@
 ------------------
 1. **将私钥文件转换为 PKCS#8**
     
-私钥当前为 openssl 的“EC 参数文件”格式：
+当前私钥为 openssl 的“EC 参数文件”格式：
 ```
 -----BEGIN EC PARAMETERS-----
 (base64)
@@ -48,11 +50,11 @@
 (base64)
 -----END EC PRIVATE KEY-----
 ```
-必须先将其转换为 PKCS#8 格式。
+首先必须将其转换为 PKCS#8 格式。
 ```
 openssl pkcs8 -topk8 -nocrypt -in your-family-name.key -out your-family-name.pkcs8
 ```
-现在，你在 your-family-name.pkcs8 文件中拥有一个 PKCS#8 私钥： 
+现在，在 your-family-name.pkcs8 文件中是一个 PKCS#8 私钥： 
 ```
 -----BEGIN PRIVATE KEY-----
 (base64)
@@ -75,7 +77,7 @@ cat your-family-name.pkcs8 your-family-name.crt > your-family-name.secret
 
 前往 Java I2P 控制台 http://127.0.0.1:7657/configfamily 页面并导出家族密钥。你将得到一个文件 `family-your-family-name-secret.crt`。它同时包含私钥和公钥证书。
 
-将其分别复制为 `your-family-name.key` 和 `your-family-name.crt`。
+将其复制两份，名称分别为 `your-family-name.key` 和 `your-family-name.crt`。
     
 用文本编辑器编辑 `your-family-name.key`，删除证书部分，使其只包含私钥部分。
     
