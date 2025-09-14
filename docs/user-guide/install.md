@@ -3,7 +3,7 @@
 
 ## 从源代码构建
 
-请参阅[文档的“开发者区”](../devs/building/requirements.md)，了解如何在你的操作系统上从源代码构建 i2pd。
+请参阅[文档的“开发者部分”](../devs/building/requirements.md)，了解如何在你的操作系统上从源代码构建 i2pd。
 
 
 ## 通过预编译软件包安装
