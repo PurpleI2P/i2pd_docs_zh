@@ -13,7 +13,7 @@ nav:
     - 配置: user-guide/configuration.md
     - I2P 隧道配置: user-guide/tunnels.md
     - 家族配置: user-guide/family.md
-    - 问与答: user-guide/FAQ.md
+    - 常见问题: user-guide/FAQ.md
 - 操作方法/教程:
     - 匿名网站: tutorials/http.md
     - 匿名 IRC 聊天: tutorials/irc.md
