@@ -83,7 +83,7 @@ msys2
 * [Visual Studio Community 版](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)（测试版本 VS2013 Update 4）
 * [Boost](http://www.boost.org/)（测试版本 1.59）
 * 可选 [MiniUPnP](http://miniupnp.free.fr)（测试版本 1.9），只需要少量客户端头文件
-* OpenSSL（测试版本 1.0.1p 和 1.0.2e），如果从源码构建（推荐），还需要
+* OpenSSL（测试版本 3.0.0），如果从源码构建（推荐），还需要
 	* [Netwide assembler](http://www.nasm.us/)
 	* Strawberry Perl 或 ActiveState Perl，请勿尝试 msys2 的 perl，它无法工作
 
@@ -111,7 +111,7 @@ Boost 编译完成后，将环境变量 `BOOST_ROOT` 设置为 Boost 解压目�
 
 	git clone https://github.com/openssl/openssl.git
 	cd openssl
-	git checkout OpenSSL_1_0_1p
+	git checkout openssl-3.0.0
 
 现在打开 Visual Studio 命令提示符并切换到 OpenSSL 目录
 

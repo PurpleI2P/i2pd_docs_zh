@@ -3,10 +3,10 @@
 
 一般来说，要构建 i2pd，你需要以下几样东西：
 
-* 完全支持 C++17 标准的编译器（例如：gcc >= 8、clang）
+* 完全支持 C++17 标准的编译器（例如：MSVC >= 2019, GCC >= 9, Clang >= 10）
 * boost >= 1.66
-* OpenSSL 库 >= 1.1.0
-* zlib 库（OpenSSL 已经依赖它）
+* OpenSSL 库 >= 1.1.1（或者 libressl 库>= 4.0）
+* zlib 库
 
 可选工具：
 

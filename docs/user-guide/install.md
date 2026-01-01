@@ -131,6 +131,10 @@ i2pd [在 Gentoo 主仓库中有可用的 ebuild](https://packages.gentoo.org/pa
 
 你可以通过[ports](https://www.freshports.org/security/i2pd/)安装 i2pd。
 
+## OpenBSD
+
+你可以通过[ports](https://openports.pl/path/net/i2pd)安装 i2pd
+
 ## MacOS X
 
 你可以通过 [brew](https://brew.sh/) 包管理器安装 i2pd：

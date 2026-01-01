@@ -1,172 +1,169 @@
-在 Unix 系统上构建
+在类 Unix 系统上构建
 =============================
-
-本文档试图涵盖：
-
-* [Debian/Ubuntu](#debian-ubuntu)（包含打包说明）
-* [Fedora/Centos](#fedora-centos)
-* [Mac OS X](#mac-os-x)
+本文档涵盖：
+* [Debian/Ubuntu](#debian-ubuntu)（包括打包）
+* [Arch/Manjaro](#arch-manjaro)
+* [Fedora/RHEL/CentOS Stream](#fedora-rhel-centos-stream)
+* [macOS](#macos)
 * [FreeBSD](#freebsd)
-* [Solaris](#solaris)
+* [OpenBSD](#openbsd)
+* [Solaris/OpenIndiana](#solaris-openindiana)
+请确保已为您的系统安装所有所需的依赖项。
+请参阅 [此页面](requirements.md) 获取常见依赖要求。
 
-请确保你的系统已成功安装所有必需的依赖项。
-常见依赖请参阅[此页面](requirements.md)。
+## 克隆并构建（使用 CMake）
+```bash
+git clone https://github.com/PurpleI2P/i2pd.git
+cd i2pd
+mkdir -p build && cd build
+cmake <cmake options> ..
+cmake --build . -j
+```
+…或者使用普通 make 的快速简易方式：
+```bash
+cd i2pd/
+make
+```
+运行测试：
+```bash
+cd i2pd/tests/
+make
+```
+在成功构建后进行安装：
+```bash
+sudo make install
+```
 
-如果都已就绪，我们就可以开始了！
-克隆代码库并开始构建 i2pd：
+## CMake 选项
+以 `-D<key>=<value>` 的形式传递选项（参见 `man 1 cmake`）：
+* `CMAKE_BUILD_TYPE` 构建配置文件（Debug/Release，默认：none）
+* `WITH_BINARY` 构建 i2pd（默认：ON）
+* `WITH_LIBRARY` 构建 libi2pd（默认：ON）
+* `WITH_STATIC` 构建静态库和静态二进制文件（默认：OFF）
+* `WITH_UPNP` 启用 UPnP 支持（需要 miniupnpc，默认：OFF）
+* `WITH_AESNI` 启用 AES-NI 支持（默认：ON）
+* `WITH_HARDENING` 启用加固选项（GCC/Clang，默认：OFF）
+* `WITH_MESHNET` 为 cjdns 测试网络构建（不适用于主网，默认：OFF）
+* `WITH_ADDRSANITIZER` 启用 AddressSanitizer（默认：OFF）
+* `WITH_THREADSANITIZER` 启用 ThreadSanitizer（默认：OFF）
 
-	git clone https://github.com/PurpleI2P/i2pd.git
+列出已缓存的选项：
+```bash
+cmake -L
+```
 
-通用的构建流程如下（使用 cmake）：
+## Debian/Ubuntu
+工具：
+```bash
+sudo apt install build-essential debhelper cmake
+```
+库：
+```bash
+sudo apt install \
+  libboost-date-time-dev \
+  libboost-filesystem-dev \
+  libboost-program-options-dev \
+  libboost-system-dev \
+  libssl-dev \
+  zlib1g-dev
+```
+UPnP（可选）：
+```bash
+sudo apt install libminiupnpc-dev
+```
+构建 `.deb` 包：
+```bash
+sudo apt install fakeroot devscripts dh-apparmor
+cd i2pd
+debuild --no-tgz-check -us -uc -b
+```
+（UPnP 开发包名称：`libminiupnpc-dev`。）
 
-	cd i2pd/build
-	cmake <cmake options> . # 参见下面“CMake 选项”部分
-	make                    # 你可以在命令行添加 VERBOSE=1 以便调试
+## Arch/Manjaro
+工具：
+```bash
+sudo pacman -S --needed base-devel cmake
+```
+库：
+```bash
+sudo pacman -S --needed boost openssl zlib
+```
 
-……或者简单粗暴地直接运行 make：：
+## Fedora/RHEL/CentOS Stream
+工具：
+```bash
+sudo dnf install make cmake gcc gcc-c++
+```
+库：
+```bash
+sudo dnf install boost-devel openssl-devel zlib-devel
+```
+UPnP（可选）：
+```bash
+sudo dnf install miniupnpc-devel
+```
+静态构建（可选）：
+```bash
+sudo dnf install boost-static
+```
+（UPnP/Boost 静态包名称：`miniupnpc-devel`、`boost-static`。在某些类似 RHEL 的系统上，您可能需要启用 EPEL/CRB 仓库。）
 
-	cd i2pd/
-	make
-
-然后运行测试：
-
-	cd i2pd/tests/
-	make
-
-构建成功后，可以安装 i2pd：
-
-	make install
-
-CMake 选项
--------------
-
-可用的 CMake 选项（每个选项形式为 `-D<key>=<value>`，更多信息参见 `man 1 cmake`）：
-
-* `CMAKE_BUILD_TYPE` 构建配置（Debug/Release，默认：无优化也无调试符号）
-* `WITH_BINARY`      构建 i2pd 本体（默认：ON）
-* `WITH_LIBRARY`     构建 libi2pd（默认：ON）
-* `WITH_STATIC`      构建静态版本的库和 i2pd 可执行文件（默认：OFF）
-* `WITH_UPNP`        启用 UPnP 支持（需要 libminiupnp，默认：OFF）
-* `WITH_AESNI`       启用 AES-NI 支持（默认：ON）
-* `WITH_HARDENING`   启用加固特性（仅 gcc，默认：OFF）
-* `WITH_MESHNET`     为 cjdns 测试网络构建（这会让应用无法用于主网，默认：OFF）
-* `WITH_ADDRSANITIZER`   启用 Address Sanitizer（默认：OFF）
-* `WITH_THREADSANITIZER` 启用 Thread Sanitizer（默认：OFF）
-
-此外，CMake 的 `-L` 标志可用于列出当前缓存的选项：
-
-	cmake -L
-
-Debian/Ubuntu
--------------
-
-你需要编译器和其他工具，可以通过安装 `build-essential`、`debhelper` 和 `cmake` 软件包获得：
-
-	sudo apt-get install build-essential debhelper cmake
-
-此外你还需要一组开发库：
-
-	sudo apt-get install \
-	    libboost-date-time-dev \
-	    libboost-filesystem-dev \
-	    libboost-program-options-dev \
-	    libboost-system-dev \
-	    libssl-dev \
-	    zlib1g-dev
-
-如果需要 UPnP 支持，需要安装 miniupnpc 开发库（别忘了用所需选项重新运行 CMake）：
-
-	sudo apt-get install libminiupnpc-dev
-
-你也可以使用以下方式构建 deb 包：
-
-	sudo apt-get install fakeroot devscripts dh-apparmor
-	cd i2pd
-	debuild --no-tgz-check -us -uc -b
-
-Arch/Manjaro
--------------
-你需要编译器和其他工具，可以通过安装 `base-devel` 软件包获得：
-	
-	sudo pacman -S base-devel
-
-此外你还需要一组库：
-	
-	sudo pacman -S boost zlib openssl
-
-Fedora/Centos
--------------
-
-你需要用于构建的编译器和其他工具：
-
-	sudo yum install make cmake gcc gcc-c++
-
-此外你还需要一组开发库：
-
-	sudo yum install boost-devel openssl-devel
-
-如果需要 UPnP 支持，需要安装 miniupnpc 开发库（别忘了用所需选项重新运行 CMake）：
-
-	sudo yum install miniupnpc-devel
-
- 对于静态构建需要 boost-static：
-
-	sudo yum install boost-static
-
-最新的 Fedora 系统默认使用 [DNF](https://en.wikipedia.org/wiki/DNF_(software)) 而不是 YUM，你也可以选择使用 DNF，但 YUM 应该也可以。
-
-Centos 7 的官方仓库中 CMake 版本为 2.8.11，过旧，无法构建 i2pd，需要 CMake ≥ 3.7。
-但你可以使用 epel 仓库中的 cmake3：
-
-	yum install epel-release -y
-	yum install make cmake3 gcc gcc-c++ miniupnpc-devel boost-devel openssl-devel -y
-
-……然后使用 “cmake3” 替代 “cmake”。
-
-Mac OS X
---------
-
-需要 [homebrew](http://brew.sh)
-
-	brew install boost openssl@1.1
-
+## macOS
+需要 Homebrew 和 Xcode Command Line Tools。
+安装依赖：
+```bash
+brew install boost openssl@3 cmake make
+```
 构建：
-
-	make HOMEBREW=1 -j8 # 使用 8 个线程
-
+```bash
+make HOMEBREW=1 -j8
+```
 安装到系统根目录（`/`）：
+```bash
+sudo make install HOMEBREW=1
+```
+安装到 Homebrew 前缀（Intel 为 `/usr/local`，Apple Silicon 为 `/opt/homebrew`）：
+```bash
+sudo make install HOMEBREW=1 PREFIX="$(brew --prefix)"
+```
 
-	sudo make install HOMEBREW=1
+## FreeBSD
+使用基础编译器（Clang）。以 root 身份安装工具和库：
+```bash
+pkg install boost-libs cmake gmake
+```
+UPnP（可选）：
+```bash
+pkg install miniupnpc
+```
+如果使用 BSD Makefile 路径，请使用 GNU make 构建：
+```bash
+gmake
+```
+（注意：FreeBSD 的基础系统中已包含 OpenSSL 和 zlib；您不需要额外安装 SSL 包。）
 
-安装到 Homebrew 根目录（`/usr/local/`）：
+## OpenBSD
+使用基础编译器（Clang）。以 root 身份安装工具和库：
+```bash
+pkg_add boost cmake gmake
+```
+UPnP（可选）：
+```bash
+pkg_add miniupnpc
+```
+如果使用 BSD Makefile 路径，请使用 GNU make 构建：
+```bash
+gmake
+```
+（注意：OpenBSD 的基础系统中已包含 LibreSSL 和 zlib；您不需要额外安装 SSL 包。）
 
-	sudo make install HOMEBREW=1 PREFIX=/usr/local
-
-FreeBSD
--------
-
-对于 10.X 使用 clang。你还需要安装 devel/boost-libs、security/openssl 和 devel/gmake 这几个 port。
-输入 gmake，它会调用 Makefile.bsd，如有需要请在其中进行必要更改。
-
-9.X 分支的 gcc 为 v4.2，过旧（不支持 -std=c++11）。
-
-所需的 ports：
-
-* `devel/cmake`
-* `devel/boost-libs`
-* `lang/gcc47`（或更高版本）
-
-要使用更新的编译器你需要设置以下变量（将“47”替换为你的实际 gcc 版本）：
-
-	export CC=/usr/local/bin/gcc47
-	export CXX=/usr/local/bin/g++47
-
-Solaris
--------
-
-对于 OpenIndiana，安装以下软件包：
-
-	pkg install developer/gcc-14
- 	pkg install system/library/boost 	
-   
-然后使用 ‘gmake’
+## Solaris/OpenIndiana
+安装所需软件包：
+```bash
+pkg install developer/gcc-14
+pkg install developer/build/cmake
+pkg install system/library/boost
+pkg install developer/build/gnu-make
+```
+然后如果直接调用 Makefile，请使用 `gmake`。
+（现代 OpenIndiana 提供 GCC 14；软件包 FMRI 如 `developer/gcc-14` 和 `system/library/boost` 遵循 IPS 命名规则。）

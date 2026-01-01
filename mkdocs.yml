@@ -20,7 +20,6 @@ nav:
     - 去中心化即时通讯 (XMPP, 又称之为 Jabber): tutorials/xmpp.md
     - 文件共享: tutorials/filesharing.md
     - 使用 RetroShare 搭配 i2pd: tutorials/retroshare.md
-    - 无需 Reseed 服务器的引导: tutorials/floodfill-bootstrap.md
     - 仅通过 Yggdrasil 的路由器配置: tutorials/yggdrasil-only-mode.md
 - 开发者部分:
     - 从源代码构建:
