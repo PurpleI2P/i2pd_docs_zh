@@ -2,6 +2,7 @@
 
 此文档已经同步英文版本至
 
+https://github.com/PurpleI2P/i2pd_docs_en/commit/19b4bc6fd2e25d9b4ed5d4d9bd4985ec5028410c
 
 ## 提交方式
 
